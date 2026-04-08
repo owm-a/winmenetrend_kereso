@@ -13,10 +13,19 @@ input, select, button {
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  box-sizing: border-box; /* gomb és input pontosan illeszkedik */
+  box-sizing: border-box; /* teljes szélesség kezelése */
+  display: block;
 }
 button { margin-top: 15px; cursor: pointer; }
 h2 { margin-top: 30px; }
+
+/* Elválasztó vonal */
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 30px 0;
+}
 
 /* Mobil optimalizálás */
 @media (max-width: 480px) {
@@ -39,6 +48,9 @@ h2 { margin-top: 30px; }
     <button type="submit">Megnyitás</button>
   </form>
 
+  <!-- Elválasztó vonal -->
+  <hr class="divider">
+
   <h2>Jármű kereső</h2>
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
@@ -51,7 +63,7 @@ h2 { margin-top: 30px; }
 // Mai dátum alapértelmezett
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-// Viszonylat link generálás
+// Viszonylat link generálás (kis/nagybetű érzéketlen)
 function openLine() {
   let line = document.getElementById('line').value.trim().toUpperCase(); 
   let date = document.getElementById('date').value;
@@ -108,7 +120,7 @@ function openLine() {
   if(line === "950" || line === "950A") line = "9500";
   if(line === "973") line = "9730";
   if(line === "979" || line === "979A") line = "9790";
-
+  
   if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
   
   let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
@@ -117,7 +129,7 @@ function openLine() {
 
 // Jármű link generálás
 function openVehicle() {
-  let vehicle = document.getElementById('vehicle').value.trim().toUpperCase();
+  let vehicle = document.getElementById('vehicle').value.trim();
   if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
 
   let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
