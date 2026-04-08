@@ -122,27 +122,28 @@ hr.light-separator {
   
   <h2>Járműkereső</h2>
 
-<form id="lineFordaForm">
-  <!-- Rendszám felülre -->
-  <label for="vehicle">Rendszám:</label>
-  <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
+  </form>
 
-  <div class="flex-row">
-    <div>
-      <label for="lineForda">Vonal:</label>
-      <input type="text" id="lineForda" placeholder="pl. 133E">
+  <form id="lineFordaForm">
+    <div class="flex-row">
+      <div>
+        <label for="lineForda">Vonal:</label>
+        <input type="text" id="lineForda" placeholder="pl. 133E">
+      </div>
     </div>
-  </div>
 
-  <!-- Apró üzenet a vonal input alá -->
-  <div class="note-small">
-    Megnyitás után a forgalmi szám alatti csíkban találod az éppen aktuális járművet.<br>
-    Érdemes lehet lejjebb görgetni, ugyanis kocsicserénél a megfelelő időpontnál ezt jelzi.<br>
-    A lap alján a rendszámra kattintva megtalálható a jármű utolsó pozíciója.
-  </div>
+    <div class="note-small">
+      Megnyitás után a forgalmi szám alatti csíkban találod az éppen aktuális járművet.<br>
+      Érdemes lehet lejjebb görgetni, ugyanis kocsicserénél a megfelelő időpontnál ezt jelzi.<br>
+      A lap alján a rendszámra kattintva megtalálható a jármű utolsó pozíciója.
+    </div>
 
-  <button type="submit">Járműkeresés vonal alapján</button>
-</form>
+    <button type="submit">Járműkeresés vonal alapján</button>
+  </form>
 
   <!-- Használati -->
   <div class="usage">
@@ -214,7 +215,7 @@ function openVehicle() {
 
 document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLine(); };
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
-document.getElementById('vehicle').onsubmit = e => { e.preventDefault(); openVehicle(); };
+document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
 ['lineForda'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', function(e){
