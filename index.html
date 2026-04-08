@@ -56,16 +56,13 @@ label[for="date"], input[type="date"] {
 .note { font-size: 12px; }
 .note-small { font-size: 11px; }
 
-/* Spacer a járműkereső gomb alá */
-.spacer {
-  height: 30px; /* igény szerint növelhető vagy csökkenthető */
-}
-
-/* Szolid elválasztó rendszám keresés után */
+/* Szolid elválasztó rendszám keresés után, minimális hely */
 .divider {
   height: 1px;
   background-color: #ddd;
-  margin: 20px 0;
+  margin: 8px 0 0 0; /* csak kis távolság a gombtól */
+  padding: 0;
+  border: none;
 }
 
 hr.separator {
@@ -140,7 +137,7 @@ hr.light-separator {
     <input type="text" id="vehicle" placeholder="pl. AOCT654 (kötőjel nélkül)">
     <button type="submit">Járműkeresés rendszám alapján</button>
 
-    <!-- Szolid elválasztó a rendszám alapú keresés után -->
+    <!-- Szolid elválasztó, minimális hely -->
     <div class="divider"></div>
   </form>
 
@@ -160,9 +157,6 @@ hr.light-separator {
 
     <button type="submit">Járműkeresés vonal alapján</button>
 
-    <!-- Üres hely a gomb alatt -->
-    <div class="spacer"></div>
-
   </form>
 
   <!-- Használati -->
@@ -180,7 +174,7 @@ hr.light-separator {
 // Autofókusz a viszonylatmezőre
 document.getElementById('line').focus();
 
-// Helyi dátum Budapest idő szerint, figyelve az óraátállításra
+// Helyi dátum Budapest idő szerint
 function getBudapestDateStr() {
   const now = new Date();
   const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
