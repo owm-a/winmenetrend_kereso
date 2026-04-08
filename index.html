@@ -165,24 +165,37 @@ document.getElementById('line').focus();
 // Mai dátum
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-// Szabályrendszeres vonal-mapping
 function mapLine(line) {
   line = line.trim().toUpperCase();
-  if(!line) return "";
+  if (!line) return "";
 
-  // Utolsó karakter betű ellenőrzése
+  const lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
+
+  // KIVÉTEL: 104 mindig 1041
+  if(line === "104") return "1041";
+
+  // 5 karakteres eset: az utolsó két karakter betűt alakítjuk
+  if (line.length === 5) {
+    let firstThree = line.slice(0, 3);
+    let fourth = lastDigitMap[line[3]] || line[3];
+    let fifth = lastDigitMap[line[4]] || line[4];
+    return firstThree + fourth + fifth;
+  }
+
+  // 4 karakter, mind szám
+  if (line.length === 4 && /^\d{4}$/.test(line)) {
+    return line; // változtatás nélkül
+  }
+
+  // 1–4 karakter
   let lastChar = line.slice(-1);
-  let lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
   let lastDigit = lastDigitMap[lastChar] || '0';
+  if (lastDigitMap[lastChar]) line = line.slice(0,-1); // levágjuk a betűt
 
-  // Ha van betű a végén, levágjuk
-  if(lastDigitMap[lastChar]) line = line.slice(0,-1);
-
-  // Most line már csak szám
   let num = line;
   if(num.length === 1) num = '00' + num;
   else if(num.length === 2) num = '0' + num;
-  // 3 vagy több jegyű szám marad úgy
+  // 3 vagy 4 jegyű szám marad
 
   return num + lastDigit;
 }
