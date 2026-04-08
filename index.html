@@ -56,6 +56,18 @@ label[for="date"], input[type="date"] {
 .note { font-size: 12px; }
 .note-small { font-size: 11px; }
 
+/* Spacer a járműkereső gomb alá */
+.spacer {
+  height: 30px; /* igény szerint növelhető vagy csökkenthető */
+}
+
+/* Szolid elválasztó rendszám keresés után */
+.divider {
+  height: 1px;
+  background-color: #ddd;
+  margin: 20px 0;
+}
+
 hr.separator {
   margin: 25px 0;
   border: none;
@@ -127,6 +139,9 @@ hr.light-separator {
     <label for="vehicle">Rendszám:</label>
     <input type="text" id="vehicle" placeholder="pl. AOCT654 (kötőjel nélkül)">
     <button type="submit">Járműkeresés rendszám alapján</button>
+
+    <!-- Szolid elválasztó a rendszám alapú keresés után -->
+    <div class="divider"></div>
   </form>
 
   <form id="lineFordaForm">
@@ -143,7 +158,11 @@ hr.light-separator {
       A lap alján a rendszámra kattintva megtalálható a jármű utolsó pozíciója.
     </div>
 
-      <button type="submit">Járműkeresés vonal alapján</button>
+    <button type="submit">Járműkeresés vonal alapján</button>
+
+    <!-- Üres hely a gomb alatt -->
+    <div class="spacer"></div>
+
   </form>
 
   <!-- Használati -->
@@ -164,9 +183,8 @@ document.getElementById('line').focus();
 // Helyi dátum Budapest idő szerint, figyelve az óraátállításra
 function getBudapestDateStr() {
   const now = new Date();
-  // Budapest időzóna offset (CET/CEST)
   const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-  const budapestOffset = 2 * 60 * 60 * 1000; // alap CET+2h
+  const budapestOffset = 2 * 60 * 60 * 1000;
   const budapestDate = new Date(utc + budapestOffset);
   
   const year = budapestDate.getFullYear();
@@ -175,12 +193,10 @@ function getBudapestDateStr() {
   return `${year}-${month}-${day}`;
 }
 
-// Viszonylatkereső dátum alapértelmezett értéke
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('date').value = getBudapestDateStr();
 });
 
-// Vonalkódos és rendszám keresés
 function mapLine(line) {
   line = line.trim().toUpperCase();
   if (!line) return "";
@@ -232,12 +248,10 @@ function openVehicle() {
   window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`, "_self");
 }
 
-// Formok eseménykezelése
 document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLine(); };
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
-// Enter gomb
 ['lineForda'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', function(e){
     if(e.key==='Enter'){ e.preventDefault(); openLineForda(); }
