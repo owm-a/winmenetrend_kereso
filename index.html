@@ -12,10 +12,11 @@ input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-siz
 input, button { width: 100%; max-width: 100%; }
 button { margin-top: 15px; cursor: pointer; }
 
-/* Dátummező külön: kisebb szélesség, középre */
-input[type="date"] {
+/* Dátum label és input együtt 80%-os szélesség, középre igazítva */
+label[for="date"], input[type="date"] {
   width: 80%;
-  margin: 5px auto 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   display: block;
 }
 
@@ -60,8 +61,14 @@ hr.separator {
   <!-- Új kis űrlap: vonal + forda -->
   <form id="lineFordaForm">
     <div class="flex-row">
-      <input type="text" id="lineForda" placeholder="Vonal (pl. 8E)">
-      <input type="text" id="forda" placeholder="Forda betűjel nélkül (pl. 57)">
+      <div style="flex:1;">
+        <label for="lineForda">Vonal?</label>
+        <input type="text" id="lineForda" placeholder="pl. 133E">
+      </div>
+      <div style="flex:1;">
+        <label for="forda">Forda:</label>
+        <input type="text" id="forda" placeholder="pl. 54">
+      </div>
     </div>
     <button type="submit">Megnyitás</button>
   </form>
@@ -71,6 +78,17 @@ hr.separator {
     <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
     <button type="submit">Megnyitás</button>
   </form>
+</div>
+
+    <!-- Használati leírás -->
+  <div class="usage">
+    <strong>Használati útmutató:</strong><br>
+    - <br>
+    - <br>
+    - <br>
+    - <br>
+    - 
+  </div>
 </div>
 
 <script>
