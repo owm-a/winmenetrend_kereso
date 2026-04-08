@@ -2,43 +2,54 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WinMenetrend Kereső</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 40px; }
-.container { max-width: 500px; margin: auto; }
+.container { max-width: 500px; width: 90%; margin: auto; }
 label { display: block; margin-top: 20px; font-weight: bold; }
-input, select, button { margin-top: 5px; width: 100%; padding: 8px; font-size: 16px; }
+input, select, button { margin-top: 5px; width: 100%; padding: 12px; font-size: 16px; }
 button { margin-top: 15px; cursor: pointer; }
+h2 { margin-top: 30px; }
+
+/* Mobil optimalizálás */
+@media (max-width: 480px) {
+  body { margin: 20px; }
+  h2 { font-size: 20px; }
+  input, button { font-size: 14px; padding: 10px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
   <h2>Viszonylat kereső</h2>
-  <label for="line">Vonal:</label>
-  <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
-  
-  <label for="date">Dátum:</label>
-  <input type="date" id="date">
-  
-  <button onclick="openLine()">Megnyitás</button>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
 
   <h2>Jármű kereső</h2>
-  <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
-  <input type="text" id="vehicle" placeholder="Pl. PDB729">
-  <button onclick="openVehicle()">Megnyitás</button>
+  <form id="vehicleForm">
+    <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
+    <input type="text" id="vehicle" placeholder="Pl. PDB729">
+    <button type="submit">Megnyitás</button>
+  </form>
 </div>
 
 <script>
 // Mai dátum alapértelmezett
-let today = new Date().toISOString().split('T')[0];
-document.getElementById('date').value = today;
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
 // Viszonylat link generálás
 function openLine() {
   let line = document.getElementById('line').value.trim();
   let date = document.getElementById('date').value;
   
-  // Példa feltételek
   if(line === "114") line = "1140";
   if(line === "115") line = "1150";
   
@@ -56,6 +67,17 @@ function openVehicle() {
   let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
   window.open(url, "_blank");
 }
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
 </script>
 </body>
 </html>
