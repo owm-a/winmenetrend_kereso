@@ -161,16 +161,23 @@ hr.light-separator {
 // Autofókusz a viszonylatmezőre
 document.getElementById('line').focus();
 
-// Helyi dátum Budapest idő szerint
-document.addEventListener('DOMContentLoaded', function() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const dateStr = `${year}-${month}-${day}`;
+// Helyi dátum Budapest idő szerint, figyelve az óraátállításra
+function getBudapestDateStr() {
+  const now = new Date();
+  // Budapest időzóna offset (CET/CEST)
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const budapestOffset = 2 * 60 * 60 * 1000; // alap CET+2h
+  const budapestDate = new Date(utc + budapestOffset);
+  
+  const year = budapestDate.getFullYear();
+  const month = String(budapestDate.getMonth() + 1).padStart(2, '0');
+  const day = String(budapestDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
-  // Viszonylatkereső dátum
-  document.getElementById('date').value = dateStr;
+// Viszonylatkereső dátum alapértelmezett értéke
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('date').value = getBudapestDateStr();
 });
 
 // Vonalkódos és rendszám keresés
@@ -209,25 +216,20 @@ function openLine() {
   let line = mapLine(document.getElementById('line').value);
   let date = document.getElementById('date').value;
   if(!line || !date) return alert("Kérlek add meg a viszonylatot!");
-  window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`);
+  window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`, "_self");
 }
 
 function openLineForda() {
   let line = mapLine(document.getElementById('lineForda').value.trim());
-  let date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const dateStr = `${year}-${month}-${day}`;
-  
+  let dateStr = getBudapestDateStr();
   if(!line) return alert("Kérlek add meg a viszonylatot!");
-  window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${dateStr}`);
+  window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${dateStr}`, "_self");
 }
 
 function openVehicle() {
   let v = document.getElementById('vehicle').value.trim();
   if(!v) return alert("Kérlek adj meg egy rendszámot!");
-  window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`);
+  window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`, "_self");
 }
 
 // Formok eseménykezelése
