@@ -68,11 +68,11 @@ hr.separator {
   <!-- Használati leírás -->
   <div class="usage">
     <strong>Használati útmutató:</strong><br>
-    Ide írhatsz részleteket arról, hogyan kell használni a keresőt. Például: <br>
-    - A "Vonal" mezőbe írj be számot vagy betű-szám kombinációt (pl. 114, 8E).<br>
-    - A "Dátum" mezőben válaszd ki a kívánt napot.<br>
-    - A "Rendszám" mezőbe írd be a jármű azonosítót kötőjel nélkül.<br>
-    - Nyomj meg a "Megnyitás" gombot az adott kereséshez.
+    - <br>
+    - <br>
+    - <br>
+    - <br>
+    - 
   </div>
 </div>
 
@@ -138,7 +138,7 @@ function openLine() {
   if(line === "973") line = "9730";
   if(line === "979" || line === "979A") line = "9790";
   
-  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  if(!line || !date) { alert("Kérlek válassz viszonylatot!"); return; }
   
   let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
   window.open(url, "_blank");
@@ -147,7 +147,7 @@ function openLine() {
 // Jármű link generálás
 function openVehicle() {
   let vehicle = document.getElementById('vehicle').value.trim();
-  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+  if(!vehicle) { alert("Kérlek írd be a jármű rendszámát!"); return; }
 
   let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
   window.open(url, "_blank");
