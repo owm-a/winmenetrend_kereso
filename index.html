@@ -6,10 +6,16 @@
 <title>WinMenetrend Kereső</title>
 
 <style>
-body { font-family: Arial, sans-serif; margin: 40px; }
+body { font-family: Arial, sans-serif; margin: 20px; }
 .container { max-width: 500px; width: 90%; margin: auto; }
 
-label { display: block; margin-top: 20px; font-weight: bold; }
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+label { display: block; margin-top: 15px; font-weight: bold; }
 
 input, button {
   margin-top: 5px;
@@ -20,7 +26,7 @@ input, button {
   width: 100%;
 }
 
-button { margin-top: 15px; cursor: pointer; }
+button { margin-top: 10px; cursor: pointer; }
 
 /* Dátum középre */
 label[for="date"], input[type="date"] {
@@ -30,27 +36,27 @@ label[for="date"], input[type="date"] {
 }
 
 /* Két mező egymás mellett */
-.flex-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+.flex-row { display: flex; gap: 10px; margin-top: 5px; }
+.flex-row input { flex: 1; }
+
+/* Apró középre igazított megjegyzés */
+.note {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin: 5px 0;
 }
 
-.flex-row > div {
-  flex: 1;                  /* mindkét mező egyforma szélesség */
-  display: flex;
-  flex-direction: column;    /* label felül, input alul */
-}
-
-/* Elválasztók */
+/* Fő elválasztó */
 hr.separator {
-  margin: 40px 0;
+  margin: 25px 0;
   border: none;
   border-top: 2px solid #ccc;
 }
 
+/* Halvány elválasztó */
 hr.light-separator {
-  margin: 25px 0;
+  margin: 15px 0;
   border: none;
   border-top: 1px solid #ddd;
 }
@@ -59,7 +65,7 @@ hr.light-separator {
 .usage {
   font-size: 12px;
   color: #555;
-  margin: 40px auto 0 auto;
+  margin: 20px auto 0 auto;
   line-height: 1.5;
   width: 80%;
   text-align: center;
@@ -67,7 +73,7 @@ hr.light-separator {
 
 /* Mobil */
 @media (max-width: 480px) {
-  body { margin: 20px; }
+  body { margin: 15px; }
   h2 { font-size: 20px; }
   input, button { font-size: 14px; padding: 10px; }
   .flex-row { flex-direction: column; }
@@ -78,24 +84,24 @@ hr.light-separator {
 <body>
 <div class="container">
 
-<h2>Viszonylat kereső</h2>
-<form id="lineForm">
-  <label for="line">Vonal:</label>
-  <input type="text" id="line" placeholder="pl. 133E">
-  
-  <label for="date">Dátum:</label>
-  <input type="date" id="date">
+  <!-- Viszonylat kereső -->
+  <h2>Viszonylat kereső</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="pl. 133E">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
 
-  <!-- Apró megjegyzés a gomb fölé -->
-  <p style="font-size:12px; color:#555; margin-top:5px;">Megnyitás után a "Vehicle" alatt találod a forgalmi számokat.</p>
+    <div class="note">Megnyitás után a "Vehicle" alatt tudod kiválasztani a megfelelő forgalmi számot.</div>
 
-  <button type="submit">Megnyitás</button>
-</form>
+    <button type="submit">Megnyitás</button>
+  </form>
 
-<hr class="separator">
+  <hr class="separator">
 
+  <!-- Jármű kereső -->
   <h2>Jármű kereső</h2>
-  <!-- Vonal + Forda + FUTÁR -->
   <form id="lineFordaForm">
     <div class="flex-row">
       <div>
@@ -104,15 +110,14 @@ hr.light-separator {
       </div>
       <div>
         <label for="forda">Forgalmi szám:</label>
-        <input type="text" id="forda" placeholder="betűjel nélkül - pl. 54">
+        <input type="text" id="forda" placeholder="pl. 54">
       </div>
     </div>
 
-    <!-- Új mező -->
-    <label for="futar">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
-    <input type="text" id="futar" placeholder="ocpionális - pl. 13350054">
+    <label for="futar" class="note">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
+    <input type="text" id="futar" placeholder="pl. 13350054">
 
-    <button type="submit">Járműkeresés forgalmi alapján</button>
+    <button type="submit">Járműkeresés</button>
   </form>
 
   <hr class="light-separator">
@@ -121,24 +126,24 @@ hr.light-separator {
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
     <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
-    <button type="submit">Járműkeresés rendszám alapján</button>
+    <button type="submit">Megnyitás</button>
   </form>
 
-  <!-- Használati -->
+  <!-- Használati útmutató -->
   <div class="usage">
     <strong>Használati útmutató:</strong><br><br>
     - Írd be a viszonylatot (pl. 8E vagy 114)<br>
-    - Forda keresésnél adhatsz meg kézzel vagy FUTÁR-kóddal<br>
-    - FUTÁR-kód külön mezőbe írva kerül feldolgozásra<br>
-    - Rendszámnál kötőjel nélkül írj<br>
-    - Enterrel minden működik
+    - A rendszer automatikusan átalakítja a kódot<br>
+    - Forda keresésnél add meg a járatot és a forda számát<br>
+    - FUTÁR-kód használata opcionális, utolsó két szám a forda, a többi a vonal<br>
+    - Rendszámnál kötőjel nélkül írj (pl. AOCT654)<br>
+    - Enterrel is működik minden mező
   </div>
 
 </div>
 
 <script>
-
-// Autofókusz
+// Autofókusz induláskor
 document.getElementById('line').focus();
 
 // Mai dátum
@@ -186,20 +191,6 @@ function mapLine(line) {
   return map[line] || line;
 }
 
-// FUTÁR feldolgozó
-function parseFutar(code) {
-  code = code.trim();
-  if (code.length < 6) return null;
-  let forda = code.slice(-2);
-  let prefix = code.slice(0, -2);
-  let line = "";
-  if (code.length === 6) line = "00" + prefix.slice(0, 2);
-  else if (code.length === 7) line = "0" + prefix.slice(0, 3);
-  else if (code.length === 8) line = prefix.slice(0, 4);
-  else return null;
-  return { line, forda };
-}
-
 // Viszonylat
 function openLine() {
   let line = mapLine(document.getElementById('line').value);
@@ -208,30 +199,31 @@ function openLine() {
   window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`);
 }
 
-// Vonal + Forda / FUTÁR
+// Vonal + Forda + FUTÁR (mindig MAI dátum!)
 function openLineForda() {
-  let line = document.getElementById('lineForda').value;
+  let line = mapLine(document.getElementById('lineForda').value.trim());
   let forda = document.getElementById('forda').value.trim();
   let futar = document.getElementById('futar').value.trim();
   let date = new Date().toISOString().split('T')[0];
 
+  // Ha FUTÁR mező van, abból bontjuk
   if(futar) {
-    let parsed = parseFutar(futar);
-    if(!parsed) return alert("Hibás FUTÁR-kód!");
-    line = parsed.line;
-    forda = parsed.forda;
-  } else {
-    line = mapLine(line);
+    let len = futar.length;
+    forda = futar.slice(-2); // utolsó két számjegy
+    if(len === 6) line = '00' + futar.slice(0,2);
+    else if(len === 7) line = '0' + futar.slice(0,3);
+    else if(len === 8) line = futar.slice(0,4);
   }
 
-  if(!line || !forda) return alert("Adj meg adatot!");
+  if(!line || !forda) return alert("Kérlek tölts ki mindent!");
+
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`);
 }
 
 // Rendszám
 function openVehicle() {
   let v = document.getElementById('vehicle').value.trim();
-  if(!v) return alert("Kérlek adj meg rendszámot!");
+  if(!v) return alert("Kérlek adj meg egy rendszámot!");
   window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`);
 }
 
@@ -240,17 +232,18 @@ document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLi
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
-// Enter fix minden mezőre
-["forda","vehicle","futar"].forEach(id => {
-  document.getElementById(id).addEventListener("keypress", e => {
-    if(e.key === "Enter"){
-      e.preventDefault();
-      if(id === "vehicle") openVehicle();
-      else openLineForda();
-    }
+// Enter kezelése
+['lineForda','forda','futar'].forEach(id => {
+  document.getElementById(id).addEventListener('keypress', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); openLineForda(); }
   });
 });
-
+document.getElementById('vehicle').addEventListener('keypress', function(e){
+  if(e.key==='Enter'){ e.preventDefault(); openVehicle(); }
+});
+document.getElementById('line').addEventListener('keypress', function(e){
+  if(e.key==='Enter'){ e.preventDefault(); openLine(); }
+});
 </script>
 </body>
 </html>
