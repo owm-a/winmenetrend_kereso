@@ -33,14 +33,13 @@ label[for="date"], input[type="date"] {
 .flex-row { display: flex; gap: 10px; margin-top: 10px; }
 .flex-row input { flex: 1; }
 
-/* Fő elválasztó */
+/* Elválasztók */
 hr.separator {
   margin: 40px 0;
   border: none;
   border-top: 2px solid #ccc;
 }
 
-/* Halvány elválasztó */
 hr.light-separator {
   margin: 25px 0;
   border: none;
@@ -85,7 +84,7 @@ hr.light-separator {
 
   <h2>Jármű kereső</h2>
 
-  <!-- Vonal + Forda -->
+  <!-- Vonal + Forda + FUTÁR -->
   <form id="lineFordaForm">
     <div class="flex-row">
       <div>
@@ -94,9 +93,14 @@ hr.light-separator {
       </div>
       <div>
         <label for="forda">Forgalmi szám:</label>
-        <input type="text" id="forda" placeholder="betűjel nélkül - pl. 54">
+        <input type="text" id="forda" placeholder="pl. 54">
       </div>
     </div>
+
+    <!-- Új mező -->
+    <label for="futar">FUTÁR-kód:</label>
+    <input type="text" id="futar" placeholder="pl. 13400056">
+
     <button type="submit">Megnyitás</button>
   </form>
 
@@ -109,20 +113,21 @@ hr.light-separator {
     <button type="submit">Megnyitás</button>
   </form>
 
-  <!-- Használati útmutató -->
+  <!-- Használati -->
   <div class="usage">
     <strong>Használati útmutató:</strong><br><br>
-    ............<br>
-    ............<br>
-    ............<br>
-    ............<br>
-    ............
+    - Írd be a viszonylatot (pl. 8E vagy 114)<br>
+    - Forda keresésnél adhatsz meg kézzel vagy FUTÁR-kóddal<br>
+    - FUTÁR-kód külön mezőbe írva kerül feldolgozásra<br>
+    - Rendszámnál kötőjel nélkül írj<br>
+    - Enterrel minden működik
   </div>
 
 </div>
 
 <script>
-// Autofókusz induláskor
+
+// Autofókusz
 document.getElementById('line').focus();
 
 // Mai dátum
@@ -131,73 +136,91 @@ document.getElementById('date').value = new Date().toISOString().split('T')[0];
 // Vonal mapping
 function mapLine(line) {
   line = line.trim().toUpperCase();
-
   const map = {
-    "8E": "0085","20E": "0205","25": "0250","225": "0250",
-    "30": "0300","30A": "0300","230": "0300",
-    "31": "0310","35": "0350","36": "0360",
-    "44": "0440","53": "0530",
-    "66": "0660","66B": "0660","66E": "0660",
-    "71": "0710","152": "0710","179": "0710",
-    "96": "0960","96A": "0960","296": "0960",
-    "97E": "0975","100E": "1005",
-    "101B": "1015","101E": "1015",
-    "104": "1041","104A": "1041","204": "1041",
-    "105": "1050","210": "1050","210B": "1050",
-    "110": "1120","112": "1120",
-    "114": "1140","213": "1140","214": "1140",
-    "120": "1200","121": "1210","122E": "1225",
-    "124": "1240","125": "1240","126": "1260",
-    "131": "1310","231": "1310","231B": "1310",
-    "133E": "1335","134": "1340","138": "1380","139": "1390",
-    "142E": "1425",
-    "147": "1470","170": "1470","270": "1470",
-    "148": "1480",
-    "151": "151",
-    "153": "1530","154": "1540","159": "1590",
-    "182": "1820","282E": "1820","182A": "1821",
-    "184": "1840","284E": "1840",
-    "196": "1960","196A": "1960",
-    "212": "2120","212A": "2120","212B": "2120",
-    "220": "2200",
-    "223E": "2235",
-    "224": "2240","224E": "2240",
-    "907": "9070","909": "9090","914A": "9141",
-    "930": "9300","941": "9410",
-    "950": "9500","950A": "9500",
-    "973": "9730",
-    "979": "9790","979A": "9790"
+    "8E":"0085","20E":"0205","25":"0250","225":"0250",
+    "30":"0300","30A":"0300","230":"0300",
+    "31":"0310","35":"0350","36":"0360",
+    "44":"0440","53":"0530",
+    "66":"0660","66B":"0660","66E":"0660",
+    "71":"0710","152":"0710","179":"0710",
+    "96":"0960","96A":"0960","296":"0960",
+    "97E":"0975","100E":"1005",
+    "101B":"1015","101E":"1015",
+    "104":"1041","104A":"1041","204":"1041",
+    "105":"1050","210":"1050","210B":"1050",
+    "110":"1120","112":"1120",
+    "114":"1140","213":"1140","214":"1140",
+    "120":"1200","121":"1210","122E":"1225",
+    "124":"1240","125":"1240","126":"1260",
+    "131":"1310","231":"1310","231B":"1310",
+    "133E":"1335","134":"1340","138":"1380","139":"1390",
+    "142E":"1425",
+    "147":"1470","170":"1470","270":"1470",
+    "148":"1480",
+    "151":"151",
+    "153":"1530","154":"1540","159":"1590",
+    "182":"1820","282E":"1820","182A":"1821",
+    "184":"1840","284E":"1840",
+    "196":"1960","196A":"1960",
+    "212":"2120","212A":"2120","212B":"2120",
+    "220":"2200",
+    "223E":"2235",
+    "224":"2240","224E":"2240",
+    "907":"9070","909":"9090","914A":"9141",
+    "930":"9300","941":"9410",
+    "950":"9500","950A":"9500",
+    "973":"9730",
+    "979":"9790","979A":"9790"
   };
-
   return map[line] || line;
+}
+
+// FUTÁR feldolgozó
+function parseFutar(code) {
+  code = code.trim();
+  if (code.length < 6) return null;
+  let forda = code.slice(-2);
+  let prefix = code.slice(0, -2);
+  let line = "";
+  if (code.length === 6) line = "00" + prefix.slice(0, 2);
+  else if (code.length === 7) line = "0" + prefix.slice(0, 3);
+  else if (code.length === 8) line = prefix.slice(0, 4);
+  else return null;
+  return { line, forda };
 }
 
 // Viszonylat
 function openLine() {
   let line = mapLine(document.getElementById('line').value);
   let date = document.getElementById('date').value;
-
   if(!line || !date) return alert("Kérlek tölts ki mindent!");
-
   window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`);
 }
 
-// Vonal + forda (mindig MAI dátum!)
+// Vonal + Forda / FUTÁR
 function openLineForda() {
-  let line = mapLine(document.getElementById('lineForda').value);
+  let line = document.getElementById('lineForda').value;
   let forda = document.getElementById('forda').value.trim();
+  let futar = document.getElementById('futar').value.trim();
   let date = new Date().toISOString().split('T')[0];
 
-  if(!line || !forda) return alert("Kérlek tölts ki mindent!");
+  if(futar) {
+    let parsed = parseFutar(futar);
+    if(!parsed) return alert("Hibás FUTÁR-kód!");
+    line = parsed.line;
+    forda = parsed.forda;
+  } else {
+    line = mapLine(line);
+  }
 
+  if(!line || !forda) return alert("Adj meg adatot!");
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`);
 }
 
 // Rendszám
 function openVehicle() {
   let v = document.getElementById('vehicle').value.trim();
-  if(!v) return alert("Kérlek adj meg egy rendszámot!");
-
+  if(!v) return alert("Kérlek adj meg rendszámot!");
   window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`);
 }
 
@@ -206,20 +229,17 @@ document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLi
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
-// EXTRA: Enter direkt kezelés
-document.getElementById('forda').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    openLineForda();
-  }
+// Enter fix minden mezőre
+["forda","vehicle","futar"].forEach(id => {
+  document.getElementById(id).addEventListener("keypress", e => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      if(id === "vehicle") openVehicle();
+      else openLineForda();
+    }
+  });
 });
 
-document.getElementById('vehicle').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    openVehicle();
-  }
-});
 </script>
 </body>
 </html>
