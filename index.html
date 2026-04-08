@@ -28,17 +28,6 @@ input, button {
 
 button { margin-top: 10px; cursor: pointer; }
 
-/* FUTÁR label */
-label.futar-label {
-  font-size: 14px; 
-  font-weight: normal; 
-  text-align: left;
-  padding-left: 5px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  display: block;
-}
-
 /* Dátum középre */
 label[for="date"], input[type="date"] {
   width: 80%;
@@ -123,48 +112,38 @@ hr.light-separator {
     <label for="date">Dátum:</label>
     <input type="date" id="date">
 
-<div class="note">
-  Megnyitás után a 'Vehicle' alatt kattints a kívánt forgalmi számra.
-</div>
+    <div class="note">
+      Megnyitás után a 'Vehicle' alatt kattints a kívánt forgalmi számra.
+    </div>
 
-<button type="submit">Megnyitás</button>
+    <button type="submit">Megnyitás</button>
 
-<div class="note-small">
-  Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
-  Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!
-</div>
+    <div class="note-small">
+      Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
+      Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!
+    </div>
+  </form>
 
   <hr class="separator">
 
-  <!-- Járműkereső -->
+  <!-- Vonal + jármű ALUL -->
   <h2>Járműkereső</h2>
 
-  <!-- Rendszám FELÜL -->
-  <form id="vehicleForm">
-    <label for="vehicle">Rendszám:</label>
-    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
-    <button type="submit">Járműkeresés rendszám alapján</button>
-  </form>
-
-  <hr class="light-separator">
-
-  <!-- Vonal + forda ALUL -->
   <form id="lineFordaForm">
     <div class="flex-row">
       <div>
         <label for="lineForda">Vonal:</label>
         <input type="text" id="lineForda" placeholder="pl. 133E">
       </div>
-      <div>
-        <label for="forda">Forgalmi szám:</label>
-        <input type="text" id="forda" placeholder="pl. 54 - betűjel nélkül">
-      </div>
     </div>
 
-    <label for="futar" class="futar-label">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
-    <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
+    <button type="submit">Járműkeresés vonal alapján</button>
+  </form>
 
-    <button type="submit">Járműkeresés forgalmi szám alapján</button>
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
   </form>
 
   <!-- Használati -->
@@ -172,7 +151,6 @@ hr.light-separator {
     <strong>Néhány hasznos információ:</strong><br><br>
     Az oldal a WinMenetrend online felületére irányít át.<br>
     Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
-    Előfordulhat, hogy csak FUTÁR-kód alapján jelenik meg a forda.<br>
     A váltások helyét és idejét nem jelzi, ezeket a kapott forda kezdési/végzési idejéből lehet kikövetkeztetni.<br>
     A kereső a BKK autóbusz-ágazatával kompatibilis.
   </div>
@@ -227,19 +205,8 @@ function openLine() {
 
 function openLineForda() {
   let line = mapLine(document.getElementById('lineForda').value.trim());
-  let forda = document.getElementById('forda').value.trim();
-  let futar = document.getElementById('futar').value.trim();
   let date = new Date().toISOString().split('T')[0];
-
-  if(futar) {
-    let len = futar.length;
-    forda = futar.slice(-2);
-    if(len === 6) line = '00' + futar.slice(0,2);
-    else if(len === 7) line = '0' + futar.slice(0,3);
-    else if(len === 8) line = futar.slice(0,4);
-  }
-
-  if(!line || !forda) return alert("Kérlek töltsd ki a szükséges adatokat!");
+  if(!line) return alert("Kérlek töltsd ki a szükséges adatokat!");
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${date}`);
 }
 
@@ -253,7 +220,7 @@ document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLi
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
-['lineForda','forda','futar'].forEach(id => {
+['lineForda'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', function(e){
     if(e.key==='Enter'){ e.preventDefault(); openLineForda(); }
   });
