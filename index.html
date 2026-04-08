@@ -28,7 +28,7 @@ input, button {
 
 button { margin-top: 10px; cursor: pointer; }
 
-/* FUTÁR label kisebb és normál */
+/* FUTÁR label */
 label.futar-label {
   font-size: 14px; 
   font-weight: normal; 
@@ -59,7 +59,7 @@ label[for="date"], input[type="date"] {
   flex-direction: column;
 }
 
-/* Apró középre igazított megjegyzés */
+/* Megjegyzés */
 .note {
   text-align: center;
   font-size: 12px;
@@ -67,40 +67,47 @@ label[for="date"], input[type="date"] {
   margin: 5px 0;
 }
 
-/* Fő elválasztó */
+/* Kisebb utolsó sor */
+.note-small {
+  display: block;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Elválasztók */
 hr.separator {
   margin: 25px 0;
   border: none;
   border-top: 2px solid #ccc;
 }
 
-/* Halvány elválasztó */
 hr.light-separator {
   margin: 15px 0;
   border: none;
   border-top: 1px solid #ddd;
 }
 
-/* Használati rész */
+/* Használati rész – BALRA igazítva */
 .usage {
   font-size: 12px;
   color: #555;
   margin: 20px auto 0 auto;
-  line-height: 1.5;
+  line-height: 1.6;
   width: 80%;
-  text-align: center;
+  text-align: left;
+  padding-left: 10px;
 }
 
-/* Járműkereső form kicsit összenyomva */
+/* Járműkereső kompaktabb */
 #lineFordaForm {
-  margin-top: 10px;  /* korábban nagyobb volt */
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 #lineFordaForm button {
   margin-top: 8px;
 }
 
-/* Mobil optimalizálás */
+/* Mobil */
 @media (max-width: 480px) {
   body { margin: 20px; }
   h2 { font-size: 20px; }
@@ -112,7 +119,6 @@ hr.light-separator {
 <body>
 <div class="container">
 
-  <!-- Viszonylat kereső -->
   <h2>Viszonylatkereső</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
@@ -124,9 +130,51 @@ hr.light-separator {
     <div class="note">
       Megnyitás után a 'Vehicle' alatt kattints a kívánt forgalmi számra.<br>
       Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
-      Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!
+      <span class="note-small">Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!</span>
     </div>
 
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <hr class="separator">
+
+  <h2>Járműkereső</h2>
+  <form id="lineFordaForm">
+    <div class="flex-row">
+      <div>
+        <label for="lineForda">Vonal:</label>
+        <input type="text" id="lineForda" placeholder="pl. 133E">
+      </div>
+      <div>
+        <label for="forda">Forgalmi szám:</label>
+        <input type="text" id="forda" placeholder="pl. 54 - betűjel nélkül">
+      </div>
+    </div>
+
+    <label for="futar" class="futar-label">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
+    <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
+
+    <button type="submit">Járműkeresés forgalmi szám alapján</button>
+  </form>
+
+  <hr class="light-separator">
+
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
+  </form>
+
+  <div class="usage">
+    <strong>Néhány hasznos információ:</strong><br><br>
+    Az oldal a WinMenetrend online felületére irányít át.<br>
+    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
+    Előfordulhat, hogy csak FUTÁR-kód alapján jelenik meg a forda.<br>
+    A váltások helyét és idejét nem jelzi, ezeket a kapott forda kezdési/végzési idejéből lehet kikövetkeztetni.<br>
+    A kereső a BKK autóbusz-ágazatával kompatibilis.
+  </div>
+
+</div>
     <button type="submit">Megnyitás</button>
   </form>
 
