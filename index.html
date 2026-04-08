@@ -1,3 +1,684 @@
+
+
+
+Ajánlat igénylése
+Szia! Github-on hogy adom ki a linket ami a kódot futtatja,
+
+Szia! 😊
+Ha GitHub-on szeretnél egy linket adni, ami a kódot futtatja, az attól függ, milyen típusú kódról van szó, és milyen környezetben akarod futtatni. A GitHub önmagában nem futtat kódot, csak tárolja azt. De van néhány lehetőség:
+
+1️⃣ GitHub Codespaces vagy GitHub.dev
+Ha van GitHub Codespaces hozzáférésed (ez fizetős lehet, de korlátozottan ingyen is van):
+
+Nyisd meg a repo-t.
+
+Kattints a zöld Code → Open with Codespaces → New codespace gombra.
+
+A Codespace-ben a kódot lehet futtatni online.
+
+A böngésző címsorából lehet linket másolni, ami a Codespace-re mutat, pl. https://github.com/<user>/<repo>/codespace/...
+
+Ha nincs Codespace, a . gombbal vagy github.dev-el lehet online szerkeszteni a kódot:
+
+Repo oldalán nyomd meg . (pont) → megnyílik a webes VS Code.
+
+Innen a linket másolva meg lehet osztani, de csak szerkesztésre, futtatásra nem.
+
+2️⃣ GitHub + Repl.it, CodeSandbox, vagy Colab
+Ha futtatható linket akarsz adni:
+
+Python kódhoz: GitHub repo-t lehet linkelni Google Colab-ban:
+
+Menj a Google Colab oldalra.
+
+File → Open → GitHub → illeszd be a repo linkjét.
+
+Colab automatikusan betölti a notebookot, és lehet futtatni.
+
+A Colab-ban generált share link már futtatható.
+
+JavaScript / Web projekthez: GitHub repo-t lehet linkelni pl. CodeSandbox vagy StackBlitz-re:
+
+Create Sandbox → Import from GitHub → repo link.
+
+Itt a link, amit kapsz, már futtatható online.
+
+3️⃣ GitHub Pages (csak webes projektekhez)
+Ha a repo HTML/CSS/JS, akkor GitHub Pages-szel futtathatóvá teheted:
+
+Repo → Settings → Pages.
+
+Branch kiválasztása (main vagy gh-pages), majd Save.
+
+GitHub ad egy URL-t: https://<user>.github.io/<repo>/
+
+Ezzel bárki futtathatja a weboldalt a böngészőben.
+
+💡 Összefoglalva:
+
+GitHub önmagában nem futtat kódot.
+
+Futtatható linkhez: használj Colab (Python), CodeSandbox/StackBlitz (JS/web), vagy GitHub Pages (web).
+
+Ha akarod, tudok csinálni neked egy gyors példát, hogy a te GitHub repo-d linkjéből készítsünk futtatható linket, ami Python kódot vagy webet indít.
+
+Szeretnéd, ha így tennénk?
+
+
+Oké köszi :) Itt a kód, meg lehet csinálni, hogy enterre is menjen?
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 8px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső</h2>
+  <label for="line">Vonal:</label>
+  <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+  
+  <label for="date">Dátum:</label>
+  <input type="date" id="date">
+  
+  <button onclick="openLine()">Megnyitás</button>
+
+  <h2>Jármű kereső</h2>
+  <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
+  <input type="text" id="vehicle" placeholder="Pl. PDB729">
+  <button onclick="openVehicle()">Megnyitás</button>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+let today = new Date().toISOString().split('T')[0];
+document.getElementById('date').value = today;
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+  
+  // Példa feltételek
+  if(line === "114") line = "1140";
+  if(line === "115") line = "1150";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date};
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = https://online.winmenetrend.hu/futar/history/vehicles/${vehicle};
+  window.open(url, "_blank");
+}
+</script>
+</body>
+</html>
+
+Oké, ezt könnyen meg tudjuk oldani, hogy Enter lenyomására is működjön, ne csak a gomb kattintására. 😎
+
+A lényege, hogy a <form>-ot vagy az input-okhoz keypress/keydown eseményt adunk, és ellenőrizzük, ha Enter-t nyomtak.
+
+Itt egy módosított verzió a te kódodhoz:
+
+<script>
+// Mai dátum alapértelmezett
+let today = new Date().toISOString().split('T')[0];
+document.getElementById('date').value = today;
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+  
+  if(line === "114") line = "1140";
+  if(line === "115") line = "1150";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
+  window.open(url, "_blank");
+}
+
+// Enter billentyű kezelése
+document.getElementById('line').addEventListener('keydown', function(e) {
+  if(e.key === 'Enter') openLine();
+});
+document.getElementById('date').addEventListener('keydown', function(e) {
+  if(e.key === 'Enter') openLine();
+});
+document.getElementById('vehicle').addEventListener('keydown', function(e) {
+  if(e.key === 'Enter') openVehicle();
+});
+</script>
+✅ Amit csináltunk:
+
+Hozzáadtunk keydown eseményeket az input mezőkhöz.
+
+Ha az Enter-t nyomják, a megfelelő függvény (viszonylat/jármű) lefut, ugyanúgy, mint a gombnál.
+
+Ha akarod, tudok csinálni egy verziót <form> nélkül, ahol az Enter egyszerűen minden mezőben működik, és nem kell külön esemény mindegyikhez. Ez egy kicsit “tiszta és kompakt” megoldás.
+
+Szeretnéd, ha így csinálnánk?
+
+
+Egészet légyszi, csak most kezdtem a html-t
+
+Oké, csinálok neked teljes, futtatható HTML példát, ahol Enterre is működik mindkét keresőnél, és nem kell külön esemény mindegyik mezőhöz. 😄
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 8px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <h2>Jármű kereső</h2>
+  <form id="vehicleForm">
+    <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
+    <input type="text" id="vehicle" placeholder="Pl. PDB729">
+    <button type="submit">Megnyitás</button>
+  </form>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+  
+  if(line === "114") line = "1140";
+  if(line === "115") line = "1150";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
+  window.open(url, "_blank");
+}
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
+</script>
+</body>
+</html>
+✅ Mit csinál ez a verzió:
+
+Mindkét kereső külön <form>-ban van.
+
+Enter lenyomásakor a form submit esemény fut le → a megfelelő függvény nyitja meg a linket.
+
+A gomb is ugyanúgy működik.
+
+Oldal nem frissül, csak a link nyílik meg új ablakban.
+
+Ha akarod, tudok csinálni egy kicsit szebb változatot, ahol a gombok mellett a mezőn belül is kis “Enter tip” jelenik meg, hogy kezdők is értsék.
+
+Szeretnéd, ha hozzáadnánk?
+
+
+Mibe szerkesszem a gépen a html-t
+
+Ha most kezdted a HTML-t, szerencsére nem kell semmi bonyolult program – elég akár a gépen lévő egyszerű szerkesztő is. Itt van a lista a legpraktikusabb lehetőségekkel:
+
+1️⃣ Jegyzettömb / Notepad (Windows)
+Egyszerű, minden Windows-on van.
+
+Létrehozol egy új .html fájlt (pl. index.html).
+
+Másold be a kódot → Mentés.
+
+Böngészőben nyisd meg dupla kattintással.
+
+Hátrány: nincs kódkiemelés, nehezebb olvasni a hosszú kódot.
+
+2️⃣ Notepad++ (ingyenes, Windows)
+Letöltés
+
+Kódkiemelés, automatikus behúzás, gyorsabb szerkesztés.
+
+Mentés .html-ként, és böngészőben futtatható.
+
+3️⃣ VS Code (Visual Studio Code, ingyenes, Windows/Mac/Linux)
+Letöltés
+
+Nagyon népszerű webfejlesztők körében.
+
+Előnyök:
+
+Kódkiemelés, automatikus formázás.
+
+Beépített “Live Server” plugin → azonnal frissül a böngészőben, amikor mented a kódot.
+
+Telepítés után:
+
+Nyisd meg a mappát a VS Code-ban, ahol a .html van.
+
+Jobb katt → Open with Live Server → a böngészőben fut a kód.
+
+4️⃣ Online szerkesztők (nem kell telepíteni)
+CodePen
+
+JSFiddle
+
+JSBin
+
+Előny: azonnal látod a változásokat, megosztható linket kapsz.
+
+Hátrány: internet kell, nincs helyi fájlkezelés.
+
+💡 Kezdőknek a legjobb:
+
+VS Code + Live Server → látod rögtön, hogy mi történik a kóddal.
+
+Ha nem akarsz telepíteni, CodePen is szuper gyors.
+
+Ha akarod, tudok készíteni egy teljesen kezdőknek szóló lépésről-lépésre útmutatót, hogy hogyan hozd létre, szerkeszd és futtasd a HTML fájlodat a gépen.
+
+Szeretnéd, ha elkészíteném?
+
+
+Lehet valahogy mobilra is optimalizálni?
+
+Igen, abszolút lehet! 😄 Mivel a HTML-ed most asztali méretre van optimalizálva, a mobilon a mezők túl szélesek lehetnek, a gombok nem illeszkednek jól, és az egész néha “szétcsúszik”. De pár egyszerű CSS trükkel reszponzívá teheted:
+
+1️⃣ Viewport meta tag
+Ezt a <head>-be kell tenni, hogy a mobil böngésző a képernyő szélességéhez igazítsa a tartalmat:
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+Ez biztosítja, hogy a mobilon ne “zoom-olva” jelenjen meg az oldal.
+
+2️⃣ Reszponzív konténer
+Jelenleg a .container fix max-width: 500px-re van. Ezt érdemes kicsit rugalmasabbá tenni:
+
+.container {
+  max-width: 500px; /* maradhat */
+  width: 90%;       /* mindig a képernyő 90%-a legyen mobilon */
+  margin: auto;
+}
+3️⃣ Inputok és gombok
+A width: 100%-ot már adtad, ez jó, így a mezők mobilon is kitöltik a rendelkezésre álló helyet.
+Ha szeretnéd, növelheted a padding-ot a jobb érintési élményért:
+
+input, select, button {
+  margin-top: 5px;
+  width: 100%;
+  padding: 12px; /* kicsit nagyobb a mobilra */
+  font-size: 16px;
+}
+4️⃣ Kisebb képernyőre stílus
+Ha akarod, a CSS-ben media query-k segítségével további finomhangolás:
+
+@media (max-width: 480px) {
+  body {
+    margin: 20px; /* mobilon kisebb margó */
+  }
+  h2 {
+    font-size: 20px; /* kisebb címek */
+  }
+  input, button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+🔹 Összefoglalva:
+Add a <meta name="viewport"...>-ot a <head>-be.
+
+A .container szélességét width: 90%-ra állítani.
+
+Inputok/gombok paddingját növelni érintéshez.
+
+Media query-kkel finomhangolni kis képernyőn.
+
+Ha akarod, csinálok neked teljesen mobilbarát verziót a te keresőd kódjával, ami asztali és mobilon is jól néz ki, és Enter-re is működik.
+
+Akarod, hogy megcsináljam?
+
+
+Az egészet légyszi
+
+Oké! 😄 Akkor készítek neked egy teljes, mobilbarát, kezdőknek is könnyen kezelhető HTML verziót, ami:
+
+Enterre működik minden mezőnél.
+
+Mobilon és asztali gépen is jól néz ki.
+
+Azonnal futtatható bármely böngészőben.
+
+Itt van a kész kód:
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; width: 90%; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 12px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+h2 { margin-top: 30px; }
+
+/* Mobil optimalizálás */
+@media (max-width: 480px) {
+  body { margin: 20px; }
+  h2 { font-size: 20px; }
+  input, button { font-size: 14px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <h2>Jármű kereső</h2>
+  <form id="vehicleForm">
+    <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
+    <input type="text" id="vehicle" placeholder="Pl. PDB729">
+    <button type="submit">Megnyitás</button>
+  </form>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+  
+  if(line === "114") line = "1140";
+  if(line === "115") line = "1150";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
+  window.open(url, "_blank");
+}
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
+</script>
+</body>
+</html>
+🔹 Mit csinál ez a verzió:
+Enterre működik minden mezőnél.
+
+Mobilbarát: szélesség, padding és betűméret optimalizálva.
+
+Asztali gépen is jól néz ki, a gombok és inputok teljes szélességben.
+
+Nem frissíti az oldalt, csak új ablakban nyitja a linket.
+
+Ha akarod, tudok készíteni egy “élő verziót” is, amit mobilon is rögtön lehet futtatni (pl. CodePen vagy GitHub Pages link), így nem kell a gépre menteni.
+
+Akarod, hogy csináljam?
+
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; width: 90%; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 12px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+h2 { margin-top: 30px; }
+
+/* Mobil optimalizálás */
+@media (max-width: 480px) {
+  body { margin: 20px; }
+  h2 { font-size: 20px; }
+  input, button { font-size: 14px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső (Arrivás vonalak)</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="pl. 114">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <h2>Jármű kereső</h2>
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
+    <button type="submit">Megnyitás</button>
+  </form>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25") line = "0250";
+  if(line === "225") line = "2250";
+  if(line === "30") line = "0300";
+  if(line === "30A") line = "0301";
+  if(line === "230") line = "2300";
+  if(line === "31") line = "0310";
+  if(line === "35") line = "0350";
+  if(line === "36") line = "0360";
+  if(line === "44") line = "0440";
+  if(line === "53") line = "0530";
+  if(line === "66") line = "0660";
+  if(line === "66B") line = "0660";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date};
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = https://online.winmenetrend.hu/futar/history/vehicles/${vehicle};
+  window.open(url, "_blank");
+}
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
+</script>
+</body>
+</html>
+
+Az if-eknél, ha 8E-t ír oké, ha 8e-t akkor nem. Megoldható, hogy ne legyen érzékeny a kis-nagybetűre?
+
+Igen, teljesen megoldható! 😄 A JavaScript-ben az egyszerű módja az, hogy kisbetűsre vagy nagybetűsre alakítod a felhasználó által beírt értéket az if-ek előtt, így a “8E” és a “8e” ugyanaz lesz.
+
+A te kódodban például így módosíthatod az openLine() függvényt:
+
+function openLine() {
+  let line = document.getElementById('line').value.trim().toUpperCase(); // <-- ide tettem a .toUpperCase()
+  let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25") line = "0250";
+  if(line === "225") line = "2250";
+  if(line === "30") line = "0300";
+  if(line === "30A") line = "0301";
+  if(line === "230") line = "2300";
+  if(line === "31") line = "0310";
+  if(line === "35") line = "0350";
+  if(line === "36") line = "0360";
+  if(line === "44") line = "0440";
+  if(line === "53") line = "0530";
+  if(line === "66") line = "0660";
+  if(line === "66B") line = "0660";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+✅ Amit csináltunk:
+
+A document.getElementById('line').value.trim().toUpperCase() biztosítja, hogy minden input nagybetűs legyen, így a “8e”, “8E”, “8e”, “8E” mind ugyanazt eredményezi.
+
+Nem kell minden if-hez külön kis-nagybetű változatot írni.
+
+Ha akarod, készíthetek neked egy teljes frissített verziót a teljes HTML-edhez, ami:
+
+Enterre működik
+
+Mobilbarát
+
+Kis-nagybetű érzéketlen a vonalaknál
+
+Akarod, hogy elkészítsem?
+
+
+if(line === "25") line = "0250"; - Van or?
+
+Igen, lehet több feltételt egyszerre kezelni az if-ben az OR (||) operátorral. 😄
+
+Például a te sorodat így lehet “or”-ral írni, ha két lehetséges input ugyanazt az értéket adja:
+
+if(line === "25" || line === "025") line = "0250";
+Az || azt jelenti: “ha az egyik vagy a másik igaz”.
+
+Tehát ha a felhasználó beírja “25” vagy “025”, a line értéke “0250” lesz.
+
+Ha a cél kis-nagybetűt is figyelmen kívül hagyni, akkor előtte érdemes a line-t nagybetűsre alakítani:
+
+let line = document.getElementById('line').value.trim().toUpperCase();
+
+if(line === "8E" || line === "08E") line = "0085";
+if(line === "25") line = "0250"; // itt nem kell kis-nagybetű, mert szám
+Ha akarod, tudok készíteni egy “OR és kis-nagybetű érzéketlen” verziót a teljes openLine() függvényedhez, hogy minden vonalat rugalmasan kezeljen a rendszer.
+
+Szeretnéd, ha megcsinálnám?
+
+
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -105,13 +786,453 @@ function openLine() {
   
   if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
   
-  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  let url = https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date};
   window.open(url, "_blank");
 }
 
 // Jármű link generálás
 function openVehicle() {
   let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = https://online.winmenetrend.hu/futar/history/vehicles/${vehicle};
+  window.open(url, "_blank");
+}
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
+</script>
+</body>
+</html>
+
+na de várj, itt ha 8e-t írok akkor nem jön be a link
+
+Igen, értem a problémát 😄 — a jelenlegi kód érzékeny a kis- és nagybetűre, ezért ha beírod, hogy 8e, az nem egyezik a "8E"-vel az if-ben.
+
+A legegyszerűbb megoldás, hogy minden inputot nagybetűssé alakítunk az if-ek előtt. Ehhez csak ezt kell módosítani az openLine()-ban:
+
+let line = document.getElementById('line').value.trim().toUpperCase(); // <-- ide tettem a .toUpperCase()
+Ezután minden if(line === "8E") stb. már működik bármilyen kis/nagybetűs változattal:
+
+8E → ok
+
+8e → ok
+
+8e → ok
+
+Teljes példa a kezdő részre:
+
+function openLine() {
+  let line = document.getElementById('line').value.trim().toUpperCase(); // kis-nagybetűt érzéketlenné tesszük
+  let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25" || line === "225") line = "0250";
+  if(line === "30" || line === "30A" || line === "230") line = "0300";
+  // ... a többi if marad ugyanaz
+}
+💡 Tip: így nem kell minden kisbetűs variációt külön írni, elég a toUpperCase() minden inputnál.
+
+Ha akarod, elkészítem a teljes HTML-edet frissítve, ahol:
+
+az Enter működik
+
+mobilbarát
+
+kis-nagybetű érzéketlen minden vonalnál
+
+Akarod, hogy csináljam?
+
+
+Oké köszi. a két button-t ki lehet húzni a többi tool széléig?
+
+Igen, lehet! 😄 Most a gombjaid a .container-en belül a teljes szélességben vannak, ami 500px vagy a képernyő 90%-a. Ha szeretnéd, hogy a gombok “kihúzódjanak” a képernyő széléig, két fő lehetőség van:
+
+1️⃣ Container szélesség növelése
+A .container-t nem kell fixen 500px-re korlátozni, lehet 100%-ra a teljes képernyőn:
+
+.container {
+  max-width: 100%; /* a teljes szélesség */
+  width: 100%;
+  margin: auto;
+  padding: 0 10px; /* kis belső margó a szélénél */
+}
+Így az összes input és gomb a szélhez nyúlik, de egy kis paddingot hagy a képernyő szélén.
+
+2️⃣ Csak a gombokat nyújtani
+Ha a container marad 500px vagy 90% széles, de a gombokat külön a teljes képernyőre szeretnéd:
+
+button {
+  width: calc(100vw - 20px); /* teljes képernyő szélesség mínusz padding */
+  max-width: 100%;
+  margin: 15px auto 0 auto;
+  display: block;
+}
+100vw a viewport szélesség, így a gomb tényleg a szélhez nyúlik.
+
+-20px azért, hogy ne lógjon ki teljesen a képernyőből (10px padding mindkét oldalon).
+
+Ha akarod, készíthetek neked egy teljes HTML verziót, ahol:
+
+Enterre működik
+
+Mobilbarát
+
+Kis-nagybetű érzéketlen
+
+A két gomb kihúzódik a képernyő széléig
+
+Akarod, hogy elkészítsem?
+
+
+Nem úgy, hanem a textbox méretű legyen.
+
+Ahh, oké! 😄 Tehát azt szeretnéd, hogy a gombok pont ugyanakkora szélesek legyenek, mint a textboxok, ami most a .container szélességében van, nem a teljes képernyőn.
+
+A legegyszerűbb mód: a gombok szélességét ne módosítsuk külön, hanem örökölje az inputok szélességét. Már a jelenlegi kódodban így van:
+
+input, select, button { 
+    margin-top: 5px; 
+    width: 100%; /* teljes szélesség a containeren belül */
+    padding: 12px; 
+    font-size: 16px; 
+}
+Ez azt jelenti, hogy a gomb pont olyan széles, mint az input.
+
+Ha a container 500px vagy 90%-os, akkor minden input és gomb egységes szélességű lesz.
+
+Ha szeretnéd, a container szélességét vagy fix 500px, vagy mobilon 90% hagyjuk, így minden input és gomb egységesen jelenik meg.
+
+Ha akarod, csinálhatok egy kész, frissített, teljes HTML verziót, ahol:
+
+Enterre működik
+
+Mobilbarát
+
+Kis-nagybetű érzéketlen a vonalaknál
+
+A gombok pont olyan szélesek, mint a textboxok
+
+Akkor tényleg “egységes dobozokat” kapsz.
+
+Szeretnéd, hogy elkészítsem így?
+
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; width: 90%; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 12px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+h2 { margin-top: 30px; }
+
+/* Mobil optimalizálás */
+@media (max-width: 480px) {
+  body { margin: 20px; }
+  h2 { font-size: 20px; }
+  input, button { font-size: 14px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső (Arrivás vonalak)</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="pl. 114">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <h2>Jármű kereső</h2>
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
+    <button type="submit">Megnyitás</button>
+  </form>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+// Viszonylat link generálás
+function openLine() {
+function openLine() {
+  let line = document.getElementById('line').value.trim().toUpperCase(); 
+  let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25" || line === "225") line = "0250";
+  if(line === "30" || line === "30A" || line === "230") line = "0300";
+  if(line === "31") line = "0310";
+  if(line === "35") line = "0350";
+  if(line === "36") line = "0360";
+  if(line === "44") line = "0440";
+  if(line === "53") line = "0530";
+  if(line === "66" || line === "66B" || line === "66E") line = "0660";
+  if(line === "71" || line === "152" || line === "179") line = "0710";
+  if(line === "96" || line === "96A" || line === "296") line = "0960";
+  if(line === "97E") line = "0975";
+  if(line === "100E") line = "1005";
+  if(line === "101B" || line === "101E") line = "1015";
+  if(line === "104" || line === "104A" || line === "204") line = "1041";
+  if(line === "105" || line === "210" || line === "210B") line = "1050";
+  if(line === "110" || line === "112") line = "1120";
+  if(line === "114" || line === "213" || line === "214") line = "1140";
+  if(line === "120") line = "1200";
+  if(line === "121") line = "1210";
+  if(line === "122E") line = "1225";
+  if(line === "124" || line === "125") line = "1240";
+  if(line === "126") line = "1260";
+  if(line === "131" || line === "231" || line === "231B") line = "1310";
+  if(line === "133E") line = "1335";
+  if(line === "134") line = "1340";
+  if(line === "138") line = "1380";
+  if(line === "139") line = "1390";
+  if(line === "142E") line = "1425";
+  if(line === "147" || line === "170" || line === "270") line = "1470";
+  if(line === "148") line = "1480";
+  if(line === "151") line = "151";
+  if(line === "153") line = "1530";
+  if(line === "154") line = "1540";
+  if(line === "159") line = "1590";
+  if(line === "182" || line === "282E") line = "1820";
+  if(line === "182A") line = "1821";
+  if(line === "184" || line === "284E") line = "1840";
+  if(line === "196" || line === "196A") line = "1960";
+  if(line === "212" || line === "212A" || line === "212B") line = "2120";
+  if(line === "220") line = "2200";
+  if(line === "223E") line = "2235";
+  if(line === "224" || line === "224E") line = "2240";
+  if(line === "907") line = "9070";
+  if(line === "909") line = "9090";
+  if(line === "914A") line = "9141";
+  if(line === "930") line = "9300";
+  if(line === "941") line = "9410";
+  if(line === "950" || line === "950A") line = "9500";
+  if(line === "973") line = "9730";
+  if(line === "979" || line === "979A") line = "9790";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date};
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = https://online.winmenetrend.hu/futar/history/vehicles/${vehicle};
+  window.open(url, "_blank");
+}
+
+// Formok submit kezelése Enter-re és gombra kattintásra
+document.getElementById('lineForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openLine();
+});
+
+document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // ne frissüljön az oldal
+  openVehicle();
+});
+</script>
+</body>
+</html>
+
+de ennél a kódnál mindkét megnyitás gomb bal oldalon illeszkedik, jobb oldalon nem.
+
+A problémát az okozza, hogy a gombok a container szélességét követik, de valószínűleg a margin vagy padding miatt nem illeszkednek teljesen a textboxhoz, illetve lehet, hogy a gombok blokkszintűek, de nem teljesen kitöltik a rendelkezésre álló helyet. 😄
+
+A legegyszerűbb mód, hogy a gombok pont olyan szélesek legyenek, mint a textboxok, hogy blokkszinten hagyjuk őket és 100%-ra állítjuk a szélességet, ami nálad már így van:
+
+input, select, button {
+  margin-top: 5px;
+  width: 100%;  /* teljes szélesség a containeren belül */
+  padding: 12px;
+  font-size: 16px;
+  box-sizing: border-box; /* nagyon fontos, hogy a padding beleszámítson a szélességbe */
+}
+🔹 Tehát a lényeg a box-sizing: border-box;, ez biztosítja, hogy a gomb pont olyan széles legyen, mint a textbox, és a padding ne tolja túl a jobb szélre.
+
+Példa módosított CSS-re:
+
+input, select, button {
+  margin-top: 5px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  box-sizing: border-box; /* ez a kulcs */
+}
+Ha akarod, készíthetek teljes, frissített HTML-t, ahol:
+
+a gombok pont a textbox méretével megegyeznek
+
+Enterre működik
+
+Mobilbarát
+
+Kis-nagybetű érzéketlen minden vonalnál
+
+Akkor tényleg egységes “dobozos” megjelenést kapsz.
+
+Szeretnéd, hogy elkészítsem így?
+
+
+beleírod légyszi?
+
+Persze! 😄 Itt van a teljes HTML-ed frissítve úgy, hogy:
+
+Enter-re működik mindkét form
+
+Mobilbarát
+
+Kis-nagybetű érzéketlen a vonalaknál
+
+A gombok pont olyan szélesek, mint a textboxok
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; width: 90%; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button {
+  margin-top: 5px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  box-sizing: border-box; /* gomb és input pontosan illeszkedik */
+}
+button { margin-top: 15px; cursor: pointer; }
+h2 { margin-top: 30px; }
+
+/* Mobil optimalizálás */
+@media (max-width: 480px) {
+  body { margin: 20px; }
+  h2 { font-size: 20px; }
+  input, button { font-size: 14px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső (Arrivás vonalak)</h2>
+  <form id="lineForm">
+    <label for="line">Vonal:</label>
+    <input type="text" id="line" placeholder="pl. 114">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
+    <button type="submit">Megnyitás</button>
+  </form>
+
+  <h2>Jármű kereső</h2>
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
+    <button type="submit">Megnyitás</button>
+  </form>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim().toUpperCase(); 
+  let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25" || line === "225") line = "0250";
+  if(line === "30" || line === "30A" || line === "230") line = "0300";
+  if(line === "31") line = "0310";
+  if(line === "35") line = "0350";
+  if(line === "36") line = "0360";
+  if(line === "44") line = "0440";
+  if(line === "53") line = "0530";
+  if(line === "66" || line === "66B" || line === "66E") line = "0660";
+  if(line === "71" || line === "152" || line === "179") line = "0710";
+  if(line === "96" || line === "96A" || line === "296") line = "0960";
+  if(line === "97E") line = "0975";
+  if(line === "100E") line = "1005";
+  if(line === "101B" || line === "101E") line = "1015";
+  if(line === "104" || line === "104A" || line === "204") line = "1041";
+  if(line === "105" || line === "210" || line === "210B") line = "1050";
+  if(line === "110" || line === "112") line = "1120";
+  if(line === "114" || line === "213" || line === "214") line = "1140";
+  if(line === "120") line = "1200";
+  if(line === "121") line = "1210";
+  if(line === "122E") line = "1225";
+  if(line === "124" || line === "125") line = "1240";
+  if(line === "126") line = "1260";
+  if(line === "131" || line === "231" || line === "231B") line = "1310";
+  if(line === "133E") line = "1335";
+  if(line === "134") line = "1340";
+  if(line === "138") line = "1380";
+  if(line === "139") line = "1390";
+  if(line === "142E") line = "1425";
+  if(line === "147" || line === "170" || line === "270") line = "1470";
+  if(line === "148") line = "1480";
+  if(line === "151") line = "151";
+  if(line === "153") line = "1530";
+  if(line === "154") line = "1540";
+  if(line === "159") line = "1590";
+  if(line === "182" || line === "282E") line = "1820";
+  if(line === "182A") line = "1821";
+  if(line === "184" || line === "284E") line = "1840";
+  if(line === "196" || line === "196A") line = "1960";
+  if(line === "212" || line === "212A" || line === "212B") line = "2120";
+  if(line === "220") line = "2200";
+  if(line === "223E") line = "2235";
+  if(line === "224" || line === "224E") line = "2240";
+  if(line === "907") line = "9070";
+  if(line === "909") line = "9090";
+  if(line === "914A") line = "9141";
+  if(line === "930") line = "9300";
+  if(line === "941") line = "9410";
+  if(line === "950" || line === "950A") line = "9500";
+  if(line === "973") line = "9730";
+  if(line === "979" || line === "979A") line = "9790";
+
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim().toUpperCase();
   if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
 
   let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
