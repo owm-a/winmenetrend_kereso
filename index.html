@@ -26,6 +26,19 @@ input, button {
   width: 100%;
 }
 
+/* FUTÁR label egy kis bal margóval és balra igazítva */
+#futar {
+  margin-top: 5px; /* opcionális, hogy ne legyen túl szoros a gombhoz képest */
+}
+
+label[for="futar"] {
+  display: block;
+  text-align: left;
+  padding-left: 5px; /* kis hely a bal széltől */
+  margin-top: 10px; /* opcionális, hogy legyen kis távolság a felette lévő mezőtől */
+  font-weight: bold;
+}
+  
 button { margin-top: 10px; cursor: pointer; }
 
 /* Dátum középre */
@@ -36,8 +49,17 @@ label[for="date"], input[type="date"] {
 }
 
 /* Két mező egymás mellett */
-.flex-row { display: flex; gap: 10px; margin-top: 5px; }
-.flex-row input { flex: 1; }
+.flex-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.flex-row > div {
+  flex: 1;                  /* mindkét mező egyforma szélesség */
+  display: flex;
+  flex-direction: column;    /* label felül, input alul */
+}
 
 /* Apró középre igazított megjegyzés */
 .note {
@@ -114,10 +136,10 @@ hr.light-separator {
       </div>
     </div>
 
-    <label for="futar" class="note">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
-    <input type="text" id="futar" placeholder="pl. 13350054">
+    <label for="futar">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
+    <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
 
-    <button type="submit">Járműkeresés</button>
+    <button type="submit">Járműkeresés forgalmi szám alapján</button>
   </form>
 
   <hr class="light-separator">
@@ -125,19 +147,17 @@ hr.light-separator {
   <!-- Rendszám -->
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
-    <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
-    <button type="submit">Megnyitás</button>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
   </form>
 
   <!-- Használati útmutató -->
   <div class="usage">
-    <strong>Használati útmutató:</strong><br><br>
-    - Írd be a viszonylatot (pl. 8E vagy 114)<br>
-    - A rendszer automatikusan átalakítja a kódot<br>
-    - Forda keresésnél add meg a járatot és a forda számát<br>
-    - FUTÁR-kód használata opcionális, utolsó két szám a forda, a többi a vonal<br>
-    - Rendszámnál kötőjel nélkül írj (pl. AOCT654)<br>
-    - Enterrel is működik minden mező
+    <strong>Tudnivalók:</strong><br><br>
+    Az oldal a WinMenetrend Online felületére irányít át.<br>
+    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a <br>
+    viszonylatot külön-külön beírva lehet megnézni az indulásokat.<br>
+    Előfordulhat, hogy FUTÁR-kód alapján jelenik meg a fordád száma.<br>
   </div>
 
 </div>
@@ -195,7 +215,7 @@ function mapLine(line) {
 function openLine() {
   let line = mapLine(document.getElementById('line').value);
   let date = document.getElementById('date').value;
-  if(!line || !date) return alert("Kérlek tölts ki mindent!");
+  if(!line || !date) return alert("Kérlek add meg a viszonylatot!");
   window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`);
 }
 
@@ -215,7 +235,7 @@ function openLineForda() {
     else if(len === 8) line = futar.slice(0,4);
   }
 
-  if(!line || !forda) return alert("Kérlek tölts ki mindent!");
+  if(!line || !forda) return alert("Kérlek töltsd ki a szükséges adatokat!");
 
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`);
 }
