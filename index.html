@@ -26,20 +26,18 @@ input, button {
   width: 100%;
 }
 
-/* FUTÁR label egy kis bal margóval és balra igazítva */
-#futar {
-  margin-top: 5px; /* opcionális, hogy ne legyen túl szoros a gombhoz képest */
-}
-
-label[for="futar"] {
-  display: block;
-  text-align: left;
-  padding-left: 5px; /* kis hely a bal széltől */
-  margin-top: 10px; /* opcionális, hogy legyen kis távolság a felette lévő mezőtől */
-  font-weight: bold;
-}
-  
 button { margin-top: 10px; cursor: pointer; }
+
+/* FUTÁR label kisebb és dőlt */
+label.futar-label {
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+  padding-left: 5px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  display: block;
+}
 
 /* Dátum középre */
 label[for="date"], input[type="date"] {
@@ -56,9 +54,9 @@ label[for="date"], input[type="date"] {
 }
 
 .flex-row > div {
-  flex: 1;                  /* mindkét mező egyforma szélesség */
+  flex: 1;
   display: flex;
-  flex-direction: column;    /* label felül, input alul */
+  flex-direction: column;
 }
 
 /* Apró középre igazított megjegyzés */
@@ -135,7 +133,7 @@ hr.light-separator {
       </div>
     </div>
 
-    <label for="futar">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
+    <label for="futar" class="futar-label">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
     <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
 
     <button type="submit">Járműkeresés forgalmi szám alapján</button>
@@ -154,8 +152,7 @@ hr.light-separator {
   <div class="usage">
     <strong>Tudnivalók:</strong><br><br>
     Az oldal a WinMenetrend Online felületére irányít át.<br>
-    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a <br>
-    viszonylatot külön-külön beírva lehet megnézni az indulásokat.<br>
+    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatot külön-külön beírva lehet megnézni az indulásokat.<br>
     Előfordulhat, hogy FUTÁR-kód alapján jelenik meg a fordád száma.<br>
   </div>
 
@@ -225,17 +222,15 @@ function openLineForda() {
   let futar = document.getElementById('futar').value.trim();
   let date = new Date().toISOString().split('T')[0];
 
-  // Ha FUTÁR mező van, abból bontjuk
   if(futar) {
     let len = futar.length;
-    forda = futar.slice(-2); // utolsó két számjegy
+    forda = futar.slice(-2);
     if(len === 6) line = '00' + futar.slice(0,2);
     else if(len === 7) line = '0' + futar.slice(0,3);
     else if(len === 8) line = futar.slice(0,4);
   }
 
   if(!line || !forda) return alert("Kérlek töltsd ki a szükséges adatokat!");
-
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`);
 }
 
