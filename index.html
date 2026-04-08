@@ -22,10 +22,10 @@ h2 { margin-top: 30px; }
 </head>
 <body>
 <div class="container">
-  <h2>Viszonylat kereső</h2>
+  <h2>Viszonylat kereső (Arrivás vonalak)</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
-    <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+    <input type="text" id="line" placeholder="pl. 114">
     
     <label for="date">Dátum:</label>
     <input type="date" id="date">
@@ -35,8 +35,8 @@ h2 { margin-top: 30px; }
 
   <h2>Jármű kereső</h2>
   <form id="vehicleForm">
-    <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
-    <input type="text" id="vehicle" placeholder="Pl. PDB729">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
     <button type="submit">Megnyitás</button>
   </form>
 </div>
@@ -49,9 +49,30 @@ document.getElementById('date').value = new Date().toISOString().split('T')[0];
 function openLine() {
   let line = document.getElementById('line').value.trim();
   let date = document.getElementById('date').value;
+
+  if(line === "8E") line = "0085";
+  if(line === "20E") line = "0205";
+  if(line === "25") line = "0250";
+  if(line === "225") line = "2250";
+  if(line === "30") line = "0300";
+  if(line === "30A") line = "0301";
+  if(line === "230") line = "2300";
+  if(line === "31") line = "0310";
+  if(line === "35") line = "0350";
+  if(line === "36") line = "0360";
+  if(line === "44") line = "0440";
+  if(line === "53") line = "0530";
+  if(line === "66") line = "0660";
+  if(line === "66B") line = "0660";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
+  if(line === "") line = "";
   
-  if(line === "114") line = "1140";
-  if(line === "115") line = "1150";
   
   if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
   
