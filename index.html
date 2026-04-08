@@ -7,14 +7,21 @@
 <style>
 body { font-family: Arial, sans-serif; margin: 40px; }
 .container { max-width: 500px; width: 90%; margin: auto; }
-label { font-weight: bold; margin-bottom: 5px; display: block; }
-input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; }
-button { margin-top: 15px; cursor: pointer; width: 100%; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; display: block; }
+input, button { width: 100%; max-width: 100%; }
+button { margin-top: 15px; cursor: pointer; }
 
-/* Dátum mező label + input flex */
-.form-group { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
-.form-group label { flex: 0 0 auto; min-width: 60px; }
-.form-group input[type="date"] { flex: 1; width: 80%; }
+/* Dátummező külön: kisebb szélesség, középre */
+input[type="date"] {
+  width: 80%;
+  margin: 5px auto 0 auto;
+  display: block;
+}
+
+/* Két mezős sor egymás mellett */
+.flex-row { display: flex; gap: 10px; margin-top: 10px; }
+.flex-row input { flex: 1; }
 
 /* Vonal elválasztó */
 hr.separator {
@@ -23,21 +30,13 @@ hr.separator {
   border-top: 2px solid #ccc;
 }
 
-/* Használati rész: kisebb betű, halvány szín */
-.usage {
-  font-size: 12px;
-  color: #555;
-  margin-top: 40px;
-  line-height: 1.5;
-}
-
 /* Mobil optimalizálás */
 @media (max-width: 480px) {
   body { margin: 20px; }
   h2 { font-size: 20px; }
   input, button { font-size: 14px; padding: 10px; }
-  .usage { font-size: 11px; }
-  .form-group input[type="date"] { width: 80%; }
+  input[type="date"] { width: 80%; }
+  .flex-row { flex-direction: column; }
 }
 </style>
 </head>
@@ -46,45 +45,41 @@ hr.separator {
   <h2>Viszonylat kereső (Arrivás vonalak)</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
-    <input type="text" id="line" placeholder="pl. 8E">
-
-    <div class="form-group">
-      <label for="date">Dátum:</label>
-      <input type="date" id="date">
-    </div>
-
+    <input type="text" id="line" placeholder="pl. 114">
+    
+    <label for="date">Dátum:</label>
+    <input type="date" id="date">
+    
     <button type="submit">Megnyitás</button>
   </form>
 
   <hr class="separator">
 
   <h2>Jármű kereső</h2>
+  
+  <!-- Új kis űrlap: vonal + forda -->
+  <form id="lineFordaForm">
+    <div class="flex-row">
+      <input type="text" id="lineForda" placeholder="Vonal (pl. 8E)">
+      <input type="text" id="forda" placeholder="Forda betűjel nélkül (pl. 57)">
+    </div>
+    <button type="submit">Megnyitás</button>
+  </form>
+
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
     <input type="text" id="vehicle" placeholder="kötőjel nélkül - pl. AOCT654">
     <button type="submit">Megnyitás</button>
   </form>
-
-  <!-- Használati leírás -->
-  <div class="usage">
-    <strong>Használati útmutató:</strong><br>
-    - <br>
-    - <br>
-    - <br>
-    - <br>
-    - 
-  </div>
 </div>
 
 <script>
 // Mai dátum alapértelmezett
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-// Viszonylat link generálás
-function openLine() {
-  let line = document.getElementById('line').value.trim().toUpperCase(); 
-  let date = document.getElementById('date').value;
-
+// Vonal átalakító (ugyanaz, mint a viszonylat keresőben)
+function mapLine(line) {
+  line = line.trim().toUpperCase();
   if(line === "8E") line = "0085";
   if(line === "20E") line = "0205";
   if(line === "25" || line === "225") line = "0250";
@@ -137,32 +132,40 @@ function openLine() {
   if(line === "950" || line === "950A") line = "9500";
   if(line === "973") line = "9730";
   if(line === "979" || line === "979A") line = "9790";
-  
-  if(!line || !date) { alert("Kérlek válassz viszonylatot!"); return; }
-  
+  return line;
+}
+
+// Viszonylat kereső
+function openLine() {
+  let line = mapLine(document.getElementById('line').value); 
+  let date = document.getElementById('date').value;
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
   let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
   window.open(url, "_blank");
 }
 
-// Jármű link generálás
+// Új vonal + forda kereső
+function openLineForda() {
+  let line = mapLine(document.getElementById('lineForda').value);
+  let forda = document.getElementById('forda').value.trim();
+  let date = document.getElementById('date').value;
+  if(!line || !forda || !date) { alert("Kérlek töltsd ki mindhárom mezőt!"); return; }
+  let url = `https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű kereső
 function openVehicle() {
   let vehicle = document.getElementById('vehicle').value.trim();
-  if(!vehicle) { alert("Kérlek írd be a jármű rendszámát!"); return; }
-
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
   let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
   window.open(url, "_blank");
 }
 
-// Formok submit kezelése Enter-re és gombra kattintásra
-document.getElementById('lineForm').addEventListener('submit', function(e) {
-  e.preventDefault(); 
-  openLine();
-});
-
-document.getElementById('vehicleForm').addEventListener('submit', function(e) {
-  e.preventDefault(); 
-  openVehicle();
-});
+// Formok submit
+document.getElementById('lineForm').addEventListener('submit', function(e){ e.preventDefault(); openLine(); });
+document.getElementById('lineFordaForm').addEventListener('submit', function(e){ e.preventDefault(); openLineForda(); });
+document.getElementById('vehicleForm').addEventListener('submit', function(e){ e.preventDefault(); openVehicle(); });
 </script>
 </body>
 </html>
