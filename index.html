@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>WinMenetrend Kereső</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+.container { max-width: 500px; margin: auto; }
+label { display: block; margin-top: 20px; font-weight: bold; }
+input, select, button { margin-top: 5px; width: 100%; padding: 8px; font-size: 16px; }
+button { margin-top: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Viszonylat kereső</h2>
+  <label for="line">Vonal:</label>
+  <input type="text" id="line" placeholder="Írd be a vonalat (pl. 114)">
+  
+  <label for="date">Dátum:</label>
+  <input type="date" id="date">
+  
+  <button onclick="openLine()">Megnyitás</button>
+
+  <h2>Jármű kereső</h2>
+  <label for="vehicle">Jármű azonosító (utolsó 6-7 karakter):</label>
+  <input type="text" id="vehicle" placeholder="Pl. PDB729">
+  <button onclick="openVehicle()">Megnyitás</button>
+</div>
+
+<script>
+// Mai dátum alapértelmezett
+let today = new Date().toISOString().split('T')[0];
+document.getElementById('date').value = today;
+
+// Viszonylat link generálás
+function openLine() {
+  let line = document.getElementById('line').value.trim();
+  let date = document.getElementById('date').value;
+  
+  // Példa feltételek
+  if(line === "114") line = "1140";
+  if(line === "115") line = "1150";
+  
+  if(!line || !date) { alert("Kérlek töltsd ki mindkét mezőt!"); return; }
+  
+  let url = `https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`;
+  window.open(url, "_blank");
+}
+
+// Jármű link generálás
+function openVehicle() {
+  let vehicle = document.getElementById('vehicle').value.trim();
+  if(!vehicle) { alert("Kérlek írd be a jármű azonosítót!"); return; }
+
+  let url = `https://online.winmenetrend.hu/futar/history/vehicles/${vehicle}`;
+  window.open(url, "_blank");
+}
+</script>
+</body>
+</html>
