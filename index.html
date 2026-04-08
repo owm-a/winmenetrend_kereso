@@ -150,10 +150,11 @@ hr.light-separator {
 
   <!-- Használati útmutató -->
   <div class="usage">
-    <strong>Tudnivalók:</strong><br><br>
-    Az oldal a WinMenetrend Online felületére irányít át.<br>
-    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatot külön-külön beírva lehet megnézni az indulásokat.<br>
-    Előfordulhat, hogy FUTÁR-kód alapján jelenik meg a fordád száma.<br>
+    <strong>Néhány hasznos információ:</strong><br><br>
+    Az oldal a WinMenetrend online felületére irányít át.<br>
+    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
+    Előfordulhat, hogy csak FUTÁR-kód alapján jelenik meg a forda.<br>
+    A váltások helyét és idejét nem jelzi, ezeket a kapott forda kezdési/végzési idejéből lehet kikövetkeztetni.
   </div>
 
 </div>
@@ -174,20 +175,27 @@ function mapLine(line) {
   // KIVÉTEL: 104 mindig 1041
   if(line === "104") return "1041";
 
-  // 5 karakteres eset: az utolsó két karakter betűt alakítjuk
-  if (line.length === 5) {
-    let firstThree = line.slice(0, 3);
-    let fourth = lastDigitMap[line[3]] || line[3];
-    let fifth = lastDigitMap[line[4]] || line[4];
-    return firstThree + fourth + fifth;
+  // 5 karakteres vagy két betű a végén
+  if(line.length === 5 || (line.length >= 3 && /[ABME]{2}$/.test(line))) {
+    // az első karaktereket számjeggyé alakítjuk, balról nullázva
+    let firstPart = line.slice(0, line.length - 2);
+    if(firstPart.length === 1) firstPart = '00' + firstPart;
+    else if(firstPart.length === 2) firstPart = '0' + firstPart;
+    else if(firstPart.length === 3) firstPart = firstPart; // 3 szám marad
+
+    // utolsó két karaktert betűből szám
+    let fourth = lastDigitMap[line[line.length-2]] || line[line.length-2];
+    let fifth  = lastDigitMap[line[line.length-1]] || line[line.length-1];
+
+    return firstPart + fourth + fifth;
   }
 
   // 4 karakter, mind szám
-  if (line.length === 4 && /^\d{4}$/.test(line)) {
+  if(line.length === 4 && /^\d{4}$/.test(line)) {
     return line; // változtatás nélkül
   }
 
-  // 1–4 karakter
+  // 1–4 karakter, utolsó karakter betű esetén átalakítjuk
   let lastChar = line.slice(-1);
   let lastDigit = lastDigitMap[lastChar] || '0';
   if (lastDigitMap[lastChar]) line = line.slice(0,-1); // levágjuk a betűt
