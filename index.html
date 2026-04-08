@@ -130,7 +130,8 @@ hr.light-separator {
     <div class="note">
       Megnyitás után a 'Vehicle' alatt kattints a kívánt forgalmi számra.<br>
       Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
-      <span class="note-small">Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!</span>
+      <span class="note-small"> Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
+        Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!</span>
     </div>
 
     <button type="submit">Megnyitás</button>
@@ -165,51 +166,6 @@ hr.light-separator {
     <button type="submit">Járműkeresés rendszám alapján</button>
   </form>
 
-  <div class="usage">
-    <strong>Néhány hasznos információ:</strong><br><br>
-    Az oldal a WinMenetrend online felületére irányít át.<br>
-    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
-    Előfordulhat, hogy csak FUTÁR-kód alapján jelenik meg a forda.<br>
-    A váltások helyét és idejét nem jelzi, ezeket a kapott forda kezdési/végzési idejéből lehet kikövetkeztetni.<br>
-    A kereső a BKK autóbusz-ágazatával kompatibilis.
-  </div>
-
-</div>
-    <button type="submit">Megnyitás</button>
-  </form>
-
-  <hr class="separator">
-
-  <!-- Jármű kereső -->
-  <h2>Járműkereső</h2>
-  <form id="lineFordaForm">
-    <div class="flex-row">
-      <div>
-        <label for="lineForda">Vonal:</label>
-        <input type="text" id="lineForda" placeholder="pl. 133E">
-      </div>
-      <div>
-        <label for="forda">Forgalmi szám:</label>
-        <input type="text" id="forda" placeholder="pl. 54 - betűjel nélkül">
-      </div>
-    </div>
-
-    <label for="futar" class="futar-label">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
-    <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
-
-    <button type="submit">Járműkeresés forgalmi szám alapján</button>
-  </form>
-
-  <hr class="light-separator">
-
-  <!-- Rendszám -->
-  <form id="vehicleForm">
-    <label for="vehicle">Rendszám:</label>
-    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
-    <button type="submit">Járműkeresés rendszám alapján</button>
-  </form>
-
-  <!-- Használati útmutató -->
   <div class="usage">
     <strong>Néhány hasznos információ:</strong><br><br>
     Az oldal a WinMenetrend online felületére irányít át.<br>
