@@ -186,7 +186,7 @@ function mapLine(line) {
   if (!line) return "";
 
   const lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
-  if(line === "104") return "1041";
+  if(line === "104" || line === "1040") return "1041";
 
   if(line.length === 5 || (line.length >= 3 && /[ABME]{2}$/.test(line))) {
     let firstPart = line.slice(0, line.length - 2);
