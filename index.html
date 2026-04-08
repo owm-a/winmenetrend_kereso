@@ -98,7 +98,7 @@ hr.light-separator {
 <body>
 <div class="container">
 
-  <h2>Viszonylatkereső</h2>
+  <h2>Fordakereső</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
     <input type="text" id="line" placeholder="pl. 133E">
@@ -219,7 +219,7 @@ function openLineForda() {
   const day = String(date.getDate()).padStart(2, '0');
   const dateStr = `${year}-${month}-${day}`;
   
-  if(!line) return alert("Kérlek töltsd ki a szükséges adatokat!");
+  if(!line) return alert("Kérlek add meg a viszonylatot!");
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${dateStr}`);
 }
 
