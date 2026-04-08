@@ -122,12 +122,6 @@ hr.light-separator {
   
   <h2>Járműkereső</h2>
 
-  <form id="vehicleForm">
-    <label for="vehicle">Rendszám:</label>
-    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
-    <button type="submit">Járműkeresés rendszám alapján</button>
-  </form>
-
   <form id="lineFordaForm">
     <div class="flex-row">
       <div>
@@ -145,6 +139,12 @@ hr.light-separator {
     <button type="submit">Járműkeresés vonal alapján</button>
   </form>
 
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
+  </form>
+
   <!-- Használati -->
   <div class="usage">
     <strong>Néhány hasznos információ:</strong><br><br>
@@ -157,18 +157,27 @@ hr.light-separator {
 </div>
 
 <script>
+// Autofókusz a viszonylatmezőre
 document.getElementById('line').focus();
 
+// Helyi dátum Budapest idő szerint
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('date').value = new Date().toISOString().split('T')[0];
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const dateStr = `${year}-${month}-${day}`;
+
+  // Viszonylatkereső dátum
+  document.getElementById('date').value = dateStr;
 });
 
+// Vonalkódos és rendszám keresés
 function mapLine(line) {
   line = line.trim().toUpperCase();
   if (!line) return "";
 
   const lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
-
   if(line === "104") return "1041";
 
   if(line.length === 5 || (line.length >= 3 && /[ABME]{2}$/.test(line))) {
@@ -204,9 +213,14 @@ function openLine() {
 
 function openLineForda() {
   let line = mapLine(document.getElementById('lineForda').value.trim());
-  let date = new Date().toISOString().split('T')[0];
+  let date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const dateStr = `${year}-${month}-${day}`;
+  
   if(!line) return alert("Kérlek töltsd ki a szükséges adatokat!");
-  window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${date}`);
+  window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}?date=${dateStr}`);
 }
 
 function openVehicle() {
@@ -215,10 +229,12 @@ function openVehicle() {
   window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`);
 }
 
+// Formok eseménykezelése
 document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLine(); };
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
+// Enter gomb
 ['lineForda'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', function(e){
     if(e.key==='Enter'){ e.preventDefault(); openLineForda(); }
