@@ -14,13 +14,9 @@ label { display: block; margin-top: 15px; font-weight: bold; }
 input, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; display: block; width: 100%; }
 button { margin-top: 10px; cursor: pointer; }
 
-/* FUTÁR label */
 label.futar-label { font-size: 14px; font-weight: normal; text-align: left; padding-left: 5px; margin-top: 10px; margin-bottom: 5px; display: block; }
 
-/* Dátum középre */
 label[for="date"], input[type="date"] { width: 80%; margin-left: auto; margin-right: auto; }
-
-/* Két mező egymás mellett */
 .flex-row { display: flex; gap: 10px; margin-top: 10px; }
 .flex-row > div { flex: 1; display: flex; flex-direction: column; }
 
@@ -28,14 +24,11 @@ label[for="date"], input[type="date"] { width: 80%; margin-left: auto; margin-ri
 .note { font-size: 12px; }
 .note-small { font-size: 11px; }
 
-/* Elválasztók */
 hr.separator { margin: 25px 0; border: none; border-top: 2px solid #ccc; }
 hr.light-separator { margin: 15px 0; border: none; border-top: 1px solid #ddd; }
 
-/* Használati rész */
 .usage { font-size: 12px; color: #555; margin: 20px auto 0 auto; line-height: 1.6; width: 80%; text-align: left; padding-left: 10px; }
 
-/* Mobil */
 @media (max-width: 480px) {
   body { margin: 20px; }
   h2 { font-size: 20px; }
@@ -47,7 +40,6 @@ hr.light-separator { margin: 15px 0; border: none; border-top: 1px solid #ddd; }
 <body>
 <div class="container">
 
-  <!-- Viszonylat -->
   <h2>Viszonylatkereső</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
@@ -70,9 +62,7 @@ hr.light-separator { margin: 15px 0; border: none; border-top: 1px solid #ddd; }
 
   <hr class="separator">
 
-  <!-- Járműkereső -->
   <h2>Járműkereső</h2>
-
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
     <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
@@ -89,11 +79,11 @@ hr.light-separator { margin: 15px 0; border: none; border-top: 1px solid #ddd; }
       </div>
       <div>
         <label for="forda">Forgalmi szám:</label>
-        <input type="text" id="forda" placeholder="pl. 54 - betűjel nélkül">
+        <input type="text" id="forda" placeholder="pl. 41">
       </div>
     </div>
 
-    <label for="futar" class="futar-label">FUTÁR-kód (amennyiben nem találtad a fordát):</label>
+    <label for="futar" class="futar-label">FUTÁR-kód (opcionális):</label>
     <input type="text" id="futar" placeholder="pl. 13350054 - opcionális">
 
     <button type="submit">Járműkeresés forgalmi szám alapján</button>
@@ -102,9 +92,7 @@ hr.light-separator { margin: 15px 0; border: none; border-top: 1px solid #ddd; }
   <div class="usage">
     <strong>Néhány hasznos információ:</strong><br><br>
     Az oldal a WinMenetrend online felületére irányít át.<br>
-    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
-    Előfordulhat, hogy csak FUTÁR-kód alapján jelenik meg a forda.<br>
-    A váltások helyét és idejét nem jelzi, ezeket a kapott forda kezdési/végzési idejéből lehet kikövetkeztetni.<br>
+    A váltások helyét és idejét a forda kezdési/végzési idejéből lehet kikövetkeztetni.<br>
     A kereső a BKK autóbusz-ágazatával kompatibilis.
   </div>
 
@@ -180,18 +168,15 @@ async function openLineForda() {
 
   if(!line || !forda) return alert("Kérlek töltsd ki a szükséges adatokat!");
 
-  // Forgalmi kiegészítése F-el
-  if(!forda.startsWith("F")) forda = "F" + forda;
-
-  // Gyűjtőoldal lekérése
+  // Gyűjtőoldal URL
   const url = `https://online.winmenetrend.hu/futar/history/lines/${line}?date=${date}`;
 
   try {
     const resp = await fetch(url);
     const html = await resp.text();
 
-    // Rendszám kinyerése a forgalmi alapján
-    const regex = new RegExp(`<a[^>]+>${forda}</a>\\s*</td>\\s*<td>\\s*<a[^>]+>([A-Z0-9]+)<`, 'i');
+    // Rendszám kinyerése a forda alapján
+    const regex = new RegExp(`<a[^>]*>${forda}</a>\\s*</td>\\s*<td>\\s*<a[^>]*>([A-Z0-9]+)<`, 'i');
     const match = html.match(regex);
 
     if(match && match[1]) {
