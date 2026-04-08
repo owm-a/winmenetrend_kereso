@@ -28,7 +28,7 @@ input, button {
 
 button { margin-top: 10px; cursor: pointer; }
 
-/* FUTÁR label kisebb és dőlt */
+/* FUTÁR label kisebb és normál */
 label.futar-label {
   font-size: 14px; 
   font-weight: normal; 
@@ -165,24 +165,26 @@ document.getElementById('line').focus();
 // Mai dátum
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
+// Szabályrendszeres vonal-mapping
 function mapLine(line) {
   line = line.trim().toUpperCase();
   if(!line) return "";
 
-  // Ellenőrizzük, hogy az utolsó karakter betű-e
+  // Utolsó karakter betű ellenőrzése
   let lastChar = line.slice(-1);
   let lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
-  let lastDigit = lastDigitMap[lastChar] || '';
+  let lastDigit = lastDigitMap[lastChar] || '0';
 
-  // Ha van betű a végén, akkor levágjuk
-  if(lastDigit) line = line.slice(0,-1);
+  // Ha van betű a végén, levágjuk
+  if(lastDigitMap[lastChar]) line = line.slice(0,-1);
 
   // Most line már csak szám
-  // Négyjegyű szám készítése: ha 3 jegyű, hozzáadunk 0-t a végére; ha 2 jegyű, 0 a végére és 0 az elejére
-  let num = line.padStart(3,'0'); // 8 -> 008, 45 -> 045, 134 -> 134
-  let result = num + (lastDigit || '0'); // ha nincs betű, utolsó jegy 0
+  let num = line;
+  if(num.length === 1) num = '00' + num;
+  else if(num.length === 2) num = '0' + num;
+  // 3 vagy több jegyű szám marad úgy
 
-  return result;
+  return num + lastDigit;
 }
 
 // Viszonylat
