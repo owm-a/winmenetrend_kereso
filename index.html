@@ -8,24 +8,22 @@
 body { font-family: Arial, sans-serif; margin: 40px; }
 .container { max-width: 500px; width: 90%; margin: auto; }
 label { display: block; margin-top: 20px; font-weight: bold; }
-input, select, button {
-  margin-top: 5px;
-  width: 100%;
-  max-width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  box-sizing: border-box;
+input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; display: block; }
+input, button { width: 100%; max-width: 100%; }
+button { margin-top: 15px; cursor: pointer; }
+
+/* Dátummező külön: kisebb szélesség, középre */
+input[type="date"] {
+  width: 80%;
+  margin: 5px auto 0 auto; /* felül 5px, alul 0, középre */
   display: block;
 }
-button { margin-top: 15px; cursor: pointer; }
-h2 { margin-top: 30px; }
 
-/* Elválasztó vonal */
-.divider {
+/* Vonal elválasztó */
+hr.separator {
+  margin: 40px 0;
   border: none;
-  height: 1px;
-  background-color: #ccc;
-  margin: 30px 0;
+  border-top: 2px solid #ccc;
 }
 
 /* Mobil optimalizálás */
@@ -33,6 +31,7 @@ h2 { margin-top: 30px; }
   body { margin: 20px; }
   h2 { font-size: 20px; }
   input, button { font-size: 14px; padding: 10px; }
+  input[type="date"] { width: 80%; }
 }
 </style>
 </head>
@@ -49,8 +48,7 @@ h2 { margin-top: 30px; }
     <button type="submit">Megnyitás</button>
   </form>
 
-  <!-- Elválasztó vonal -->
-  <hr class="divider">
+  <hr class="separator">
 
   <h2>Jármű kereső</h2>
   <form id="vehicleForm">
@@ -64,7 +62,7 @@ h2 { margin-top: 30px; }
 // Mai dátum alapértelmezett
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-// Viszonylat link generálás (kis/nagybetű érzéketlen)
+// Viszonylat link generálás
 function openLine() {
   let line = document.getElementById('line').value.trim().toUpperCase(); 
   let date = document.getElementById('date').value;
@@ -103,8 +101,8 @@ function openLine() {
   if(line === "148") line = "1480";
   if(line === "151") line = "151";
   if(line === "153") line = "1530";
-  if(line === "154") line = "1540";
-  if(line === "159") line = "1590";
+  if(line === "154") line === "1540";
+  if(line === "159") line === "1590";
   if(line === "182" || line === "282E") line = "1820";
   if(line === "182A") line = "1821";
   if(line === "184" || line === "284E") line = "1840";
@@ -139,12 +137,12 @@ function openVehicle() {
 
 // Formok submit kezelése Enter-re és gombra kattintásra
 document.getElementById('lineForm').addEventListener('submit', function(e) {
-  e.preventDefault(); // ne frissüljön az oldal
+  e.preventDefault(); 
   openLine();
 });
 
 document.getElementById('vehicleForm').addEventListener('submit', function(e) {
-  e.preventDefault(); // ne frissüljön az oldal
+  e.preventDefault(); 
   openVehicle();
 });
 </script>
