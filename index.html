@@ -7,16 +7,14 @@
 <style>
 body { font-family: Arial, sans-serif; margin: 40px; }
 .container { max-width: 500px; width: 90%; margin: auto; }
-label { display: block; margin-top: 20px; font-weight: bold; }
-input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; display: block; }
-input, button { width: 100%; max-width: 100%; }
-button { margin-top: 15px; cursor: pointer; }
+label { font-weight: bold; margin-bottom: 5px; display: block; }
+input, select, button { margin-top: 5px; padding: 12px; font-size: 16px; box-sizing: border-box; }
+button { margin-top: 15px; cursor: pointer; width: 100%; }
 
-/* Dátummező: kisebb szélesség, balra igazítva a labelhez */
-input[type="date"] {
-  width: 80%;
-  display: block;
-}
+/* Dátum mező label + input flex */
+.form-group { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+.form-group label { flex: 0 0 auto; min-width: 60px; }
+.form-group input[type="date"] { flex: 1; width: 80%; }
 
 /* Vonal elválasztó */
 hr.separator {
@@ -38,8 +36,8 @@ hr.separator {
   body { margin: 20px; }
   h2 { font-size: 20px; }
   input, button { font-size: 14px; padding: 10px; }
-  input[type="date"] { width: 80%; }
   .usage { font-size: 11px; }
+  .form-group input[type="date"] { width: 80%; }
 }
 </style>
 </head>
@@ -49,10 +47,12 @@ hr.separator {
   <form id="lineForm">
     <label for="line">Vonal:</label>
     <input type="text" id="line" placeholder="pl. 8E">
-    
-    <label for="date">Dátum:</label>
-    <input type="date" id="date">
-    
+
+    <div class="form-group">
+      <label for="date">Dátum:</label>
+      <input type="date" id="date">
+    </div>
+
     <button type="submit">Megnyitás</button>
   </form>
 
@@ -111,9 +111,9 @@ function openLine() {
   if(line === "126") line = "1260";
   if(line === "131" || line === "231" || line === "231B") line = "1310";
   if(line === "133E") line === "1335";
-  if(line === "134") line === "1340";
-  if(line === "138") line === "1380";
-  if(line === "139") line === "1390";
+  if(line === "134") line = "1340";
+  if(line === "138") line = "1380";
+  if(line === "139") line = "1390";
   if(line === "142E") line = "1425";
   if(line === "147" || line === "170" || line === "270") line = "1470";
   if(line === "148") line = "1480";
