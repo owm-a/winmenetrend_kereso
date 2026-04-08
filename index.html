@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WinMenetrend Kereső</title>
-
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; }
 .container { max-width: 500px; width: 90%; margin: auto; }
@@ -13,6 +12,7 @@ h2 {
   margin-top: 20px;
   margin-bottom: 10px;
   font-size: 22px;
+  text-align: center; /* <-- ide kerül a középre igazítás */
 }
 
 label { display: block; margin-top: 15px; font-weight: bold; }
@@ -56,15 +56,6 @@ label[for="date"], input[type="date"] {
 .note { font-size: 12px; }
 .note-small { font-size: 11px; }
 
-/* Szolid elválasztó rendszám keresés után */
-.divider {
-  height: 1px;
-  background-color: #ddd;
-  margin: 8px 0 0 0; /* csak kis távolság a gombtól */
-  padding: 0;
-  border: none;
-}
-
 hr.separator {
   margin: 25px 0;
   border: none;
@@ -88,7 +79,7 @@ hr.light-separator {
 }
 
 #lineFordaForm {
-  margin-top: 5px; /* minimális hely a vonalmező fölött */
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 #lineFordaForm button {
@@ -103,7 +94,6 @@ hr.light-separator {
 }
 </style>
 </head>
-
 <body>
 <div class="container">
 
@@ -111,7 +101,7 @@ hr.light-separator {
   <form id="lineForm">
     <label for="line">Vonal:</label>
     <input type="text" id="line" placeholder="pl. 133E">
-    
+
     <label for="date">Dátum:</label>
     <input type="date" id="date">
 
@@ -129,16 +119,12 @@ hr.light-separator {
   </form>
 
   <hr class="separator">
-  
-  <h2>Járműkereső</h2>
 
+  <h2>Járműkereső</h2>
   <form id="vehicleForm">
     <label for="vehicle">Rendszám:</label>
     <input type="text" id="vehicle" placeholder="pl. AOCT654 (kötőjel nélkül)">
     <button type="submit">Járműkeresés rendszám alapján</button>
-
-    <!-- Szolid elválasztó, minimális hely -->
-    <div class="divider"></div>
   </form>
 
   <form id="lineFordaForm">
@@ -156,7 +142,6 @@ hr.light-separator {
     </div>
 
     <button type="submit">Járműkeresés vonal alapján</button>
-
   </form>
 
   <!-- Használati -->
@@ -180,7 +165,7 @@ function getBudapestDateStr() {
   const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
   const budapestOffset = 2 * 60 * 60 * 1000;
   const budapestDate = new Date(utc + budapestOffset);
-  
+
   const year = budapestDate.getFullYear();
   const month = String(budapestDate.getMonth() + 1).padStart(2, '0');
   const day = String(budapestDate.getDate()).padStart(2, '0');
