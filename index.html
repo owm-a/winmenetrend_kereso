@@ -67,7 +67,6 @@ label[for="date"], input[type="date"] {
   margin: 5px 0;
 }
 
-/* Kisebb utolsó sor */
 .note-small {
   display: block;
   font-size: 11px;
@@ -87,7 +86,7 @@ hr.light-separator {
   border-top: 1px solid #ddd;
 }
 
-/* Használati rész – BALRA igazítva */
+/* Használati rész */
 .usage {
   font-size: 12px;
   color: #555;
@@ -119,6 +118,7 @@ hr.light-separator {
 <body>
 <div class="container">
 
+  <!-- Viszonylat -->
   <h2>Viszonylatkereső</h2>
   <form id="lineForm">
     <label for="line">Vonal:</label>
@@ -129,8 +129,10 @@ hr.light-separator {
 
     <div class="note">
       Megnyitás után a 'Vehicle' alatt kattints a kívánt forgalmi számra.<br>
-      <span class="note-small"> Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
-        Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!</span>
+      <span class="note-small">
+        Előfordulhat, hogy az aznapi FUTÁR-kódhoz hasonló számsor lesz a keresett forgalmi.<br>
+        Ha nincs találat, próbáld meg a fordán belüli másik viszonylattal is!
+      </span>
     </div>
 
     <button type="submit">Megnyitás</button>
@@ -138,7 +140,19 @@ hr.light-separator {
 
   <hr class="separator">
 
+  <!-- Járműkereső -->
   <h2>Járműkereső</h2>
+
+  <!-- Rendszám FELÜL -->
+  <form id="vehicleForm">
+    <label for="vehicle">Rendszám:</label>
+    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
+    <button type="submit">Járműkeresés rendszám alapján</button>
+  </form>
+
+  <hr class="light-separator">
+
+  <!-- Vonal + forda ALUL -->
   <form id="lineFordaForm">
     <div class="flex-row">
       <div>
@@ -157,14 +171,7 @@ hr.light-separator {
     <button type="submit">Járműkeresés forgalmi szám alapján</button>
   </form>
 
-  <hr class="light-separator">
-
-  <form id="vehicleForm">
-    <label for="vehicle">Rendszám:</label>
-    <input type="text" id="vehicle" placeholder="pl. AOCT654 - kötőjel nélkül">
-    <button type="submit">Járműkeresés rendszám alapján</button>
-  </form>
-
+  <!-- Használati -->
   <div class="usage">
     <strong>Néhány hasznos információ:</strong><br><br>
     Az oldal a WinMenetrend online felületére irányít át.<br>
@@ -177,7 +184,7 @@ hr.light-separator {
 </div>
 
 <script>
-// Autofókusz induláskor
+// Autofókusz
 document.getElementById('line').focus();
 
 // Mai dátum
@@ -189,10 +196,8 @@ function mapLine(line) {
 
   const lastDigitMap = { 'A':'1', 'B':'2', 'M':'4', 'E':'5' };
 
-  // KIVÉTEL: 104 mindig 1041
   if(line === "104") return "1041";
 
-  // 5 karakteres vagy két betű a végén
   if(line.length === 5 || (line.length >= 3 && /[ABME]{2}$/.test(line))) {
     let firstPart = line.slice(0, line.length - 2);
     if(firstPart.length === 1) firstPart = '00' + firstPart;
@@ -204,12 +209,8 @@ function mapLine(line) {
     return firstPart + fourth + fifth;
   }
 
-  // 4 karakter, mind szám
-  if(line.length === 4 && /^\d{4}$/.test(line)) {
-    return line;
-  }
+  if(line.length === 4 && /^\d{4}$/.test(line)) return line;
 
-  // 1–4 karakter, utolsó karakter betű esetén
   let lastChar = line.slice(-1);
   let lastDigit = lastDigitMap[lastChar] || '0';
   if (lastDigitMap[lastChar]) line = line.slice(0,-1);
@@ -221,7 +222,6 @@ function mapLine(line) {
   return num + lastDigit;
 }
 
-// Viszonylat
 function openLine() {
   let line = mapLine(document.getElementById('line').value);
   let date = document.getElementById('date').value;
@@ -229,7 +229,6 @@ function openLine() {
   window.open(`https://online.winmenetrend.hu/budapest/latest/lines/${line}/vehicles?date=${date}`);
 }
 
-// Vonal + Forda + FUTÁR (mindig MAI dátum!)
 function openLineForda() {
   let line = mapLine(document.getElementById('lineForda').value.trim());
   let forda = document.getElementById('forda').value.trim();
@@ -248,19 +247,16 @@ function openLineForda() {
   window.open(`https://online.winmenetrend.hu/futar/history/lines/${line}/${forda}?date=${date}`);
 }
 
-// Rendszám
 function openVehicle() {
   let v = document.getElementById('vehicle').value.trim();
   if(!v) return alert("Kérlek adj meg egy rendszámot!");
   window.open(`https://online.winmenetrend.hu/futar/history/vehicles/${v}`);
 }
 
-// Submitok
 document.getElementById('lineForm').onsubmit = e => { e.preventDefault(); openLine(); };
 document.getElementById('lineFordaForm').onsubmit = e => { e.preventDefault(); openLineForda(); };
 document.getElementById('vehicleForm').onsubmit = e => { e.preventDefault(); openVehicle(); };
 
-// Enter kezelése
 ['lineForda','forda','futar'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', function(e){
     if(e.key==='Enter'){ e.preventDefault(); openLineForda(); }
