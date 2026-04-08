@@ -159,7 +159,9 @@ hr.light-separator {
 <script>
 document.getElementById('line').focus();
 
-document.getElementById('date').value = new Date().toISOString().split('T')[0];
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('date').value = new Date().toISOString().split('T')[0];
+});
 
 function mapLine(line) {
   line = line.trim().toUpperCase();
