@@ -12,7 +12,7 @@ h2 {
   margin-top: 20px;
   margin-bottom: 10px;
   font-size: 22px;
-  text-align: center; /* <-- ide kerül a középre igazítás */
+  text-align: center;
 }
 
 label { display: block; margin-top: 15px; font-weight: bold; }
@@ -144,22 +144,19 @@ hr.light-separator {
     <button type="submit">Járműkeresés vonal alapján</button>
   </form>
 
-  <!-- Használati -->
-  <div class="usage">
-    <strong>Néhány hasznos információ:</strong><br><br>
-    Az oldal a WinMenetrend online felületére irányít át.<br>
-    Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
-    A váltások helye megállapítható, ugyanis a kapott forda kezdési/végzési idejéből kikövetkeztethető.<br>
-    A kereső a BKK autóbusz-ágazatával kompatibilis.
-  </div>
+<div class="usage">
+  <strong>Néhány hasznos információ:</strong><br><br>
+  Az oldal a <a href="https://online.winmenetrend.hu/" target="_blank">WinMenetrend</a> online felületére irányít át.<br>
+  Amennyiben egy fordában vonalcsoporton kívüli átszerelés van, úgy a viszonylatokat külön-külön beírva lehet megnézni.<br>
+  A váltások helye megállapítható, ugyanis a kapott forda kezdési/végzési idejéből kikövetkeztethető.<br>
+  A kereső a BKK autóbusz-ágazatával kompatibilis.
+</div>
 
 </div>
 
 <script>
-// Autofókusz a viszonylatmezőre
 document.getElementById('line').focus();
 
-// Helyi dátum Budapest idő szerint
 function getBudapestDateStr() {
   const now = new Date();
   const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
